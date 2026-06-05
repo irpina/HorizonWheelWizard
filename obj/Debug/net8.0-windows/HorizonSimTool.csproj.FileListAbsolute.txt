@@ -1,0 +1,14 @@
+C:\Users\XxDan\Documents\Horizon SimTool\HorizonSimTool-FULL\bin\Debug\net8.0-windows\HorizonSimTool.exe
+C:\Users\XxDan\Documents\Horizon SimTool\HorizonSimTool-FULL\bin\Debug\net8.0-windows\HorizonSimTool.deps.json
+C:\Users\XxDan\Documents\Horizon SimTool\HorizonSimTool-FULL\bin\Debug\net8.0-windows\HorizonSimTool.runtimeconfig.json
+C:\Users\XxDan\Documents\Horizon SimTool\HorizonSimTool-FULL\bin\Debug\net8.0-windows\HorizonSimTool.dll
+C:\Users\XxDan\Documents\Horizon SimTool\HorizonSimTool-FULL\bin\Debug\net8.0-windows\HorizonSimTool.pdb
+C:\Users\XxDan\Documents\Horizon SimTool\HorizonSimTool-FULL\obj\Debug\net8.0-windows\HorizonSimTool.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\XxDan\Documents\Horizon SimTool\HorizonSimTool-FULL\obj\Debug\net8.0-windows\HorizonSimTool.AssemblyInfoInputs.cache
+C:\Users\XxDan\Documents\Horizon SimTool\HorizonSimTool-FULL\obj\Debug\net8.0-windows\HorizonSimTool.AssemblyInfo.cs
+C:\Users\XxDan\Documents\Horizon SimTool\HorizonSimTool-FULL\obj\Debug\net8.0-windows\HorizonSimTool.csproj.CoreCompileInputs.cache
+C:\Users\XxDan\Documents\Horizon SimTool\HorizonSimTool-FULL\obj\Debug\net8.0-windows\HorizonSimTool.dll
+C:\Users\XxDan\Documents\Horizon SimTool\HorizonSimTool-FULL\obj\Debug\net8.0-windows\refint\HorizonSimTool.dll
+C:\Users\XxDan\Documents\Horizon SimTool\HorizonSimTool-FULL\obj\Debug\net8.0-windows\HorizonSimTool.pdb
+C:\Users\XxDan\Documents\Horizon SimTool\HorizonSimTool-FULL\obj\Debug\net8.0-windows\HorizonSimTool.genruntimeconfig.cache
+C:\Users\XxDan\Documents\Horizon SimTool\HorizonSimTool-FULL\obj\Debug\net8.0-windows\ref\HorizonSimTool.dll
