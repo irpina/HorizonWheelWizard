@@ -6,11 +6,35 @@ Horizon SimTool is a Windows GUI utility for creating and installing Forza Horiz
 
 It helps sim racing users map their real hardware devices, generate patched XML and INI files, package them into the correct game zip files, and optionally silence extra controller devices while the app is running.
 
+
+## Credits and Acknowledgements
+
+Horizon SimTool was inspired by community research, guides, troubleshooting posts, and official documentation shared by the Forza Horizon and sim racing communities on reddit.
+
+Special thanks and credit to the following sources for documenting fixes, mapping behavior, VID/PID usage, force feedback configuration, DirectInput override behavior, backup practices, and troubleshooting steps that helped inspire this tool:
+
+* Reddit user `swagikuro` and contributors from the Simagic community for the guide:
+  [How to setup FFB on Forza Horizon WITHOUT Emuwheel and not needing it to be Device 1](https://www.reddit.com/r/Simagic/comments/1toeiim/how_to_setup_ffb_on_forza_horizon_without/)
+
+* Reddit user `problemchild52` for the Moza R3 ESX mapping guide:
+  [Moza R3 ESX Forza Horizon 6 Complete Mapping (90%) Finally!](https://www.reddit.com/r/ForzaHorizon6/comments/1tixvvw/moza_r3_esx_forza_horizon_6_complete_mapping_90/)
+
+* Reddit user `Cptkrush` for the Fanatec CSL DD troubleshooting and configuration post:
+  [For folks on PC (Steam) with issues getting their Fanatec CSL DD to work](https://www.reddit.com/r/ForzaHorizon/comments/1tf2dj0/for_folks_on_pc_steam_with_issues_getting_their/)
+
+* The Forza Support Team for the official wheel input documentation:
+  [Forza Horizon 6 on Wheel: Wheel Input on Steam](https://support.forza.net/hc/en-us/articles/51642975681427-Forza-Horizon-6-on-Wheel-Wheel-Input-on-Steam)
+
+This project is not a copy of those guides. It was created to turn the manual community workflow into a more user friendly Windows GUI tool that can help users generate, back up, install, and manage their own wheel mapping and force feedback configuration files.
+
+All credit belongs to the original authors and communities for the research and information they shared. Their guides helped make this tool possible for the community. Thanks!
+
 ## AI Disclosure
 
 This application was fully created using AI with OpenAI Codex.
 
-The code and ful application was created with AI assistance. Review the code before relying on it, especially because this tool can modify game files and can disable controller-class devices system-wide.
+The code and full application was created with AI assistance. Review the code before relying on it, especially because this tool can modify game files and can disable controller-class devices system-wide.
+
 
 ## What The App Does
 
@@ -120,6 +144,21 @@ Use:
 - **Import** to bring in a preset file and load it.
 - **Export** to share a preset file.
 
+## Additional Note: Device Hiding / HidHide Alternative
+
+Instead of using the **Silence** function, which disables all other controller devices on your system, you can also use **HidHide** as a solid alternative to hide specific devices from the game.
+
+**HidHide:**
+https://github.com/nefarius/HidHide
+
+In my case, I personally have to disable or hide my **vJoy** device, which I use for other games. From my testing, I can only get **4 devices working reliably at one time** in-game. If I add a 5th device, such as an Xbox controller, things may still partially work, but I noticed that I lose the ability to adjust the **FFB settings** in the **Advanced Controls** section.
+
+If you are familiar with tools like **vJoy** and **SimHub**, you can also map multiple devices together into a single vJoy device. This can help reduce the number of devices the game sees while still allowing you to combine inputs from different hardware.
+
+Just make sure you keep your **wheelbase separate** and do not combine it into vJoy, so it does not interfere with force feedback.
+
+**Recommended setup:**
+**Wheelbase + vJoy = More Flexibility**
 
 
 ## Important Disclaimer
