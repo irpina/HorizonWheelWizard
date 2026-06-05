@@ -1,4 +1,3 @@
-# Horizon-Sim-Tool
 # Horizon SimTool
 
 Horizon SimTool is a Windows GUI utility for creating and installing Forza Horizon wheel, force feedback, and controller mapping fixes.
