@@ -6,8 +6,9 @@ Horizon SimTool is a Windows GUI utility for creating and installing Forza Horiz
 
 It helps sim racing users map their real hardware devices, generate patched XML and INI files, package them into the correct game zip files, and optionally silence extra controller devices while the app is running.
 
-
 ## Credits and Acknowledgements
+
+This my first public app release! 
 
 Horizon SimTool was inspired by community research, guides, troubleshooting posts, and official documentation shared by the Forza Horizon and sim racing communities on reddit.
 
