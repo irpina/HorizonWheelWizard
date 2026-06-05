@@ -1,5 +1,7 @@
 # Horizon SimTool
 
+<img width="3840" height="2075" alt="HST" src="https://github.com/user-attachments/assets/142934aa-8b3f-4f90-8817-78a0851cad24" />
+
 Horizon SimTool is a Windows GUI utility for creating and installing Forza Horizon wheel, force feedback, and controller mapping fixes.
 
 It helps sim racing users map their real hardware devices, generate patched XML and INI files, package them into the correct game zip files, and optionally silence extra controller devices while the app is running.
