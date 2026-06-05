@@ -2,9 +2,9 @@
 
 <img width="3840" height="2075" alt="HST" src="https://github.com/user-attachments/assets/142934aa-8b3f-4f90-8817-78a0851cad24" />
 
-Horizon SimTool is a Windows GUI utility for creating and installing Forza Horizon wheel, force feedback, and controller mapping fixes.
+Horizon SimTool is a Windows GUI utility for creating and installing Forza Horizon's wheel controller mapping files.
 
-It helps sim racing users map their real hardware devices, generate patched XML and INI files, package them into the correct game zip files, and optionally silence extra controller devices while the app is running.
+It helps sim users map their real FFB wheelbase and devices, generate patched XML and INI files, package them into the correct game zip files, and optionally silence extra controller devices while the app is running.
 
 ## Credits and Acknowledgements
 
@@ -160,6 +160,22 @@ Just make sure you keep your **wheelbase separate** and do not combine it into v
 
 **Recommended setup:**
 **Wheelbase + vJoy = More Flexibility**
+
+## In-Game Wheel Setup
+
+a.) Launch the game.
+
+b.) When setting up your wheel controls, **do not start from the Custom Wheel Profile**. Instead, scroll all the way to the left until you find the **Wheelbase Profile**. This should be the profile you selected in the app.
+
+c.) Set your steering input on this Wheelbase Profile first. The game should then ask you to overwrite one of the available **Custom Wheel Profiles**.
+
+d.) Choose the Custom Wheel Profile slot you want to overwrite.
+
+e.) After that, continue mapping the rest of your required controls, including your wheel buttons, pedals, e-brake, shifter, and any other devices you are using.
+
+f.) Once all required controls are mapped, save the Custom Wheel Profile.
+
+g.) After saving, test your setup in-game to confirm that steering, pedals, buttons, force feedback, and any additional devices are working correctly.
 
 
 ## Important Disclaimer
