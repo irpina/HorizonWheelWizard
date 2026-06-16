@@ -6,9 +6,9 @@
 
 **Guided wheel setup for Forza Horizon — detect, map, install.**
 
-[![Release](https://img.shields.io/github/v/release/irpina/HorizonWheelWizard?style=flat-square&color=ff6600&label=latest)](https://github.com/irpina/HorizonWheelWizard/releases/latest)
+[![Release](https://img.shields.io/badge/release-v1.1-ff6600?style=flat-square)](https://github.com/irpina/HorizonWheelWizard/releases/latest)
 [![Platform](https://img.shields.io/badge/platform-Windows-blue?style=flat-square)](https://github.com/irpina/HorizonWheelWizard/releases/latest)
-[![License](https://img.shields.io/github/license/irpina/HorizonWheelWizard?style=flat-square)](LICENSE)
+[![.NET](https://img.shields.io/badge/.NET-8-512bd4?style=flat-square)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 
 [**Download**](https://github.com/irpina/HorizonWheelWizard/releases/latest) · [**Website**](https://irpina.github.io/HorizonWheelWizard/) · [**Report a bug**](https://github.com/irpina/HorizonWheelWizard/issues)
 
