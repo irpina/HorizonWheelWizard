@@ -13,5 +13,9 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="Assets\HorizonSimTool.png" CopyToOutputDirectory="Never" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2903.40" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="wwwroot\**\*" CopyToOutputDirectory="Always" />
   </ItemGroup>
 </Project>

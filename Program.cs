@@ -77,10 +77,12 @@ internal static class Program
             return 0;
         }
 
-        Application.Run(new MainForm());
+        Application.Run(new WebUIForm());
         GC.KeepAlive(singleInstance);
         return 0;
     }
+
+    public static string DefaultOutputFolder() => Path.Combine(AppContext.BaseDirectory, "output");
 
     private static int UnknownCommand(string command)
     {
