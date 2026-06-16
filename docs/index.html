@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Horizon Wheel Wizard</title>
+<meta name="description" content="A guided Windows app for setting up your sim racing wheel in Forza Horizon. Detect your wheel, find the game, map 26 inputs, and install — in one wizard flow." />
+<meta property="og:title" content="Horizon Wheel Wizard" />
+<meta property="og:description" content="Guided wheel setup wizard for Forza Horizon. Moza, Fanatec, Simagic, Thrustmaster, and more." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Saira:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --card: #1c2230;
+  --border: #30363d;
+  --muted: #8b949e;
+  --text: #c9d1d9;
+  --heading: #e6edf3;
+  --orange: #ff6600;
+  --orange-dim: rgba(255,102,0,.12);
+  --green: #3fb950;
+  --blue: #58a6ff;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Nav ── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(13,17,23,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  gap: 12px;
+}
+.nav-bar { width: 4px; height: 28px; background: var(--orange); border-radius: 2px; flex-shrink: 0; }
+.nav-brand {
+  font-family: 'Saira', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--heading);
+  letter-spacing: -.01em;
+}
+.nav-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--orange-dim);
+  color: var(--orange);
+  border: 1px solid rgba(255,102,0,.3);
+  border-radius: 4px;
+  padding: 2px 7px;
+  letter-spacing: .04em;
+}
+.nav-links { margin-left: auto; display: flex; gap: 24px; }
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: color .15s;
+}
+.nav-links a:hover { color: var(--heading); }
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--orange);
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 7px;
+  transition: background .15s;
+}
+.nav-cta:hover { background: #e05800; }
+
+/* ── Hero ── */
+.hero {
+  padding: 96px 32px 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,102,0,.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--orange);
+  margin-bottom: 20px;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: rgba(255,102,0,.4);
+}
+h1 {
+  font-family: 'Saira', sans-serif;
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 800;
+  color: var(--heading);
+  letter-spacing: -.02em;
+  line-height: 1.05;
+  margin-bottom: 20px;
+}
+h1 span { color: var(--orange); }
+.hero-sub {
+  font-size: clamp(15px, 2vw, 18px);
+  color: var(--muted);
+  max-width: 520px;
+  margin: 0 auto 36px;
+}
+.hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--orange);
+  color: #fff;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 13px 28px;
+  border-radius: 8px;
+  transition: background .15s;
+}
+.btn-primary:hover { background: #e05800; }
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px 28px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  transition: background .15s;
+}
+.btn-secondary:hover { background: #21262d; }
+
+/* ── Brands strip ── */
+.brands {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 32px;
+  text-align: center;
+}
+.brands p { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: 14px; }
+.brands-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.brand-pill {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* ── Steps section ── */
+.section { padding: 80px 32px; max-width: 1000px; margin: 0 auto; }
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--orange);
+  margin-bottom: 10px;
+}
+h2 {
+  font-family: 'Saira', sans-serif;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 800;
+  color: var(--heading);
+  letter-spacing: -.01em;
+  margin-bottom: 48px;
+}
+.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
+.step-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.step-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--orange);
+  opacity: .6;
+}
+.step-num {
+  font-family: 'Saira', sans-serif;
+  font-size: 42px;
+  font-weight: 800;
+  color: rgba(255,102,0,.12);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.step-card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--heading);
+  margin-bottom: 8px;
+}
+.step-card p { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+/* ── Feature list ── */
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 40px; }
+.feature {
+  display: flex;
+  gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+}
+.feature-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--orange);
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+.feature h4 { font-size: 14px; font-weight: 600; color: var(--heading); margin-bottom: 4px; }
+.feature p { font-size: 12px; color: var(--muted); }
+
+/* ── Requirements ── */
+.req-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 28px; }
+.req-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 13px;
+}
+.req-card .req-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 4px; }
+.req-card .req-val { color: var(--heading); font-weight: 600; }
+
+/* ── Credit ── */
+.credit-box {
+  background: rgba(88,166,255,.05);
+  border: 1px solid rgba(88,166,255,.2);
+  border-radius: 10px;
+  padding: 24px;
+  margin-top: 0;
+}
+.credit-box h3 { font-size: 14px; font-weight: 700; color: var(--blue); margin-bottom: 8px; }
+.credit-box p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.credit-box a { color: var(--blue); text-decoration: none; }
+.credit-box a:hover { text-decoration: underline; }
+
+/* ── Footer ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 32px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+footer a { color: var(--muted); text-decoration: none; }
+footer a:hover { color: var(--heading); }
+
+@media (max-width: 600px) {
+  nav { padding: 0 16px; }
+  .nav-links { display: none; }
+  .hero { padding: 64px 20px 56px; }
+  .section { padding: 56px 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-bar"></div>
+  <span class="nav-brand">Horizon Wheel Wizard</span>
+  <span class="nav-badge">v1.0</span>
+  <div class="nav-links">
+    <a href="#steps">How it works</a>
+    <a href="#requirements">Requirements</a>
+    <a href="https://github.com/irpina/HorizonWheelWizard">GitHub</a>
+  </div>
+  <a class="nav-cta" href="https://github.com/irpina/HorizonWheelWizard/releases/latest">
+    Download
+  </a>
+</nav>
+
+<section class="hero">
+  <div class="hero-eyebrow">Forza Horizon · Sim Racing</div>
+  <h1>Wheel setup,<br><span>done right.</span></h1>
+  <p class="hero-sub">A guided Windows wizard for connecting your sim racing wheel to Forza Horizon. Detect, map, and install in four steps.</p>
+  <div class="hero-actions">
+    <a class="btn-primary" href="https://github.com/irpina/HorizonWheelWizard/releases/latest">
+      ↓ Download v1.0
+    </a>
+    <a class="btn-secondary" href="https://github.com/irpina/HorizonWheelWizard">
+      View on GitHub
+    </a>
+  </div>
+</section>
+
+<div class="brands">
+  <p>Compatible wheels</p>
+  <div class="brands-list">
+    <span class="brand-pill">Moza</span>
+    <span class="brand-pill">Fanatec</span>
+    <span class="brand-pill">Simagic</span>
+    <span class="brand-pill">Thrustmaster</span>
+    <span class="brand-pill">Logitech G</span>
+    <span class="brand-pill">SimuCube</span>
+    <span class="brand-pill">Cammus</span>
+    <span class="brand-pill">Asetek</span>
+    <span class="brand-pill">+ more</span>
+  </div>
+</div>
+
+<div class="section" id="steps">
+  <div class="section-label">How it works</div>
+  <h2>Four steps to the apex.</h2>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">01</div>
+      <h3>Detect Your Wheel</h3>
+      <p>Auto-scans all connected controllers. Known sim hardware is highlighted. Moza, Fanatec, Simagic, and more detected automatically.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <h3>Find Forza</h3>
+      <p>Auto-detects your Forza Horizon install on Steam and Xbox Game Pass. Browse manually if needed.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">03</div>
+      <h3>Map Controls</h3>
+      <p>Press each input when prompted. Covers all 26 bindings: steering, pedals, paddles, face buttons, D-Pad, and more.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">04</div>
+      <h3>Generate &amp; Install</h3>
+      <p>One click creates a backup, builds the patched ZIP, and installs it straight to your game's media folder.</p>
+    </div>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature">
+      <div class="feature-dot"></div>
+      <div>
+        <h4>Quick Remap</h4>
+        <p>After setup, remap any single binding without re-running the full wizard.</p>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-dot"></div>
+      <div>
+        <h4>Backup &amp; Restore</h4>
+        <p>Originals backed up to HST-BACKUP before anything is touched. One-click restore.</p>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-dot"></div>
+      <div>
+        <h4>FFB Tuning</h4>
+        <p>Optional force feedback templates for compatible wheels via the Advanced panel.</p>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-dot"></div>
+      <div>
+        <h4>No Server, No Port</h4>
+        <p>Fully local — WebView2 renders the UI inside the app. Nothing reaches the network.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="requirements" style="padding-top:0;">
+  <div class="section-label">Requirements</div>
+  <h2>What you need.</h2>
+  <div class="req-grid">
+    <div class="req-card">
+      <div class="req-label">OS</div>
+      <div class="req-val">Windows 10 (1803+) or Windows 11</div>
+    </div>
+    <div class="req-card">
+      <div class="req-label">Runtime</div>
+      <div class="req-val">.NET 8 Desktop Runtime</div>
+    </div>
+    <div class="req-card">
+      <div class="req-label">Browser</div>
+      <div class="req-val">WebView2 (ships with Edge / Win 11)</div>
+    </div>
+    <div class="req-card">
+      <div class="req-label">Game</div>
+      <div class="req-val">Forza Horizon (Steam or Xbox)</div>
+    </div>
+  </div>
+
+  <div style="margin-top:40px;">
+    <div class="section-label">Built on</div>
+    <div class="credit-box">
+      <h3>Horizon SimTool by Dxniel02</h3>
+      <p>
+        Horizon Wheel Wizard is built on top of
+        <a href="https://github.com/Dxniel02/Horizon-SimTool">Horizon SimTool</a>
+        by <a href="https://github.com/Dxniel02">Dxniel02</a>.
+        The core backend — device enumeration, XML/INI patching, zip generation, game file installation,
+        backup/restore, and the original mapping engine — all come from that project.
+        This tool adds a WebView2 wizard UI on top of that foundation.
+      </p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>
+    <strong style="color:#e6edf3;">Horizon Wheel Wizard</strong> v1.0 &nbsp;·&nbsp;
+    <a href="https://github.com/irpina/HorizonWheelWizard">GitHub</a> &nbsp;·&nbsp;
+    <a href="https://github.com/irpina/HorizonWheelWizard/releases">Releases</a> &nbsp;·&nbsp;
+    <a href="https://github.com/irpina/HorizonWheelWizard/blob/main/README.md">Docs</a>
+  </p>
+  <p style="margin-top:8px;">
+    Built on <a href="https://github.com/Dxniel02/Horizon-SimTool">Horizon SimTool</a> by Dxniel02.
+    Not affiliated with Microsoft, Xbox, Playground Games, or any hardware manufacturer.
+  </p>
+</footer>
+
+</body>
+</html>
