@@ -1,0 +1,31 @@
+﻿@inherits LayoutComponentBase
+
+<div class="flex h-screen overflow-hidden bg-track-bg">
+    <NavMenu />
+
+    <div class="flex flex-col flex-1 overflow-hidden">
+        <!-- Top bar -->
+        <header class="flex items-center justify-between px-6 py-3 border-b border-track-border bg-track-surface shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-1 h-5 rounded-sm bg-racing-orange"></div>
+                <span class="text-xs text-track-muted font-mono tracking-widest uppercase">Horizon SimTool</span>
+            </div>
+            <div class="flex items-center gap-2 text-xs text-track-muted font-mono">
+                <span class="inline-block w-2 h-2 rounded-full bg-racing-green animate-pulse"></span>
+                Ready
+            </div>
+        </header>
+
+        <!-- Page content -->
+        <main class="flex-1 overflow-y-auto p-6">
+            @Body
+        </main>
+    </div>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet
+     class="fixed bottom-4 right-4 bg-track-card border border-racing-red text-track-text text-sm px-4 py-3 rounded-lg shadow-lg hidden">
+    An unhandled error has occurred.
+    <a href="." class="text-racing-orange underline ml-2">Reload</a>
+    <span class="dismiss ml-3 cursor-pointer text-track-muted hover:text-track-bright">&#x2715;</span>
+</div>

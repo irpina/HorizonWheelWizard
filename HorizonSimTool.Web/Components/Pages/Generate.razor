@@ -1,0 +1,82 @@
+@page "/generate"
+<PageTitle>Generate &amp; Install — Horizon SimTool</PageTitle>
+
+<div class="mb-6">
+    <h1 class="text-2xl font-bold text-track-bright tracking-tight">Generate &amp; Install</h1>
+    <p class="text-sm text-track-muted mt-1">Build your patched profile and deploy to the game</p>
+</div>
+
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-6 max-w-4xl">
+    <!-- Game paths -->
+    <div class="bg-track-card border border-track-border rounded-xl p-5">
+        <h2 class="text-sm font-semibold text-track-bright mb-4 flex items-center gap-2">
+            <span class="w-1 h-4 bg-racing-orange rounded-sm inline-block"></span>
+            Game Files
+        </h2>
+        <div class="space-y-3">
+            <div>
+                <label class="block text-xs text-track-muted mb-1">Game media folder</label>
+                <div class="flex gap-2">
+                    <input type="text" placeholder="C:\XboxGames\Forza Horizon 6\Content\media"
+                           class="flex-1 bg-track-surface border border-track-border text-track-text text-xs font-mono rounded-lg px-3 py-2 focus:outline-none focus:border-racing-orange placeholder-track-muted/40" />
+                    <button class="px-3 py-2 bg-track-surface border border-track-border hover:border-track-muted text-track-text text-xs rounded-lg transition-colors">Find</button>
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs text-track-muted mb-1">inputmappingprofiles.zip</label>
+                <div class="flex gap-2">
+                    <input type="text" class="flex-1 bg-track-surface border border-track-border text-track-text text-xs font-mono rounded-lg px-3 py-2 focus:outline-none focus:border-racing-orange" readonly />
+                    <button class="px-3 py-2 bg-track-surface border border-track-border hover:border-track-muted text-track-text text-xs rounded-lg transition-colors">Browse</button>
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs text-track-muted mb-1">wheeltunablesettingspc.zip</label>
+                <div class="flex gap-2">
+                    <input type="text" class="flex-1 bg-track-surface border border-track-border text-track-text text-xs font-mono rounded-lg px-3 py-2 focus:outline-none focus:border-racing-orange" readonly />
+                    <button class="px-3 py-2 bg-track-surface border border-track-border hover:border-track-muted text-track-text text-xs rounded-lg transition-colors">Browse</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Options -->
+    <div class="bg-track-card border border-track-border rounded-xl p-5">
+        <h2 class="text-sm font-semibold text-track-bright mb-4 flex items-center gap-2">
+            <span class="w-1 h-4 bg-racing-blue rounded-sm inline-block"></span>
+            Options
+        </h2>
+        <div class="space-y-3">
+            <label class="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" checked class="accent-racing-orange w-4 h-4" />
+                <span class="text-sm text-track-text">Patch selected XML in place</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" class="accent-racing-orange w-4 h-4" />
+                <span class="text-sm text-track-text">Apply FFB wheel tuning</span>
+            </label>
+            <div>
+                <label class="block text-xs text-track-muted mb-1">New profile filename</label>
+                <input type="text" value="DefaultRawGameControllerMappingProfileCodexCustom.xml"
+                       class="w-full bg-track-surface border border-track-border text-track-text text-xs font-mono rounded-lg px-3 py-2 focus:outline-none focus:border-racing-orange" disabled />
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Actions -->
+<div class="flex flex-wrap items-center gap-3 mt-6">
+    <button class="px-4 py-2 bg-track-card border border-track-border hover:border-track-muted text-track-text text-sm rounded-lg transition-colors">Create Backup</button>
+    <button class="px-4 py-2 bg-track-card border border-track-border hover:border-track-muted text-track-text text-sm rounded-lg transition-colors">Restore Backups</button>
+    <button class="px-4 py-2 bg-racing-orange hover:bg-racing-orange/90 text-white text-sm font-semibold rounded-lg transition-colors">Generate Files</button>
+    <button class="px-4 py-2 bg-racing-green hover:bg-racing-green/90 text-white text-sm font-semibold rounded-lg transition-colors">Install Generated Files</button>
+</div>
+
+<!-- Log -->
+<div class="mt-6 bg-track-card border border-track-border rounded-xl overflow-hidden max-w-4xl">
+    <div class="px-4 py-2 border-b border-track-border">
+        <span class="text-xs font-semibold text-track-muted uppercase tracking-wider">Status Log</span>
+    </div>
+    <div class="p-4 font-mono text-xs text-track-muted min-h-24">
+        <span class="text-track-muted/40">— awaiting action —</span>
+    </div>
+</div>
