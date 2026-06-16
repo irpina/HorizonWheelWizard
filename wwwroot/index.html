@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Horizon SimTool</title>
+<title>Horizon Wheel Wizard</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
@@ -26,6 +26,14 @@ tailwind.config = {
 }
 </script>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Saira:wght@500;600;700;800&display=swap');
+
+:root {
+  --racing-orange: #ff6600;
+  --racing-blue: #58a6ff;
+  --blue-tint: rgba(88,166,255,.12);
+}
+
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; overflow: hidden; }
 body { background: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', system-ui, sans-serif; }
@@ -95,6 +103,56 @@ body { background: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', system-ui, 
 .toast.info    { background: rgba(88,166,255,.92); color: #fff; }
 
 .vid-pid { font-family: Consolas, monospace; font-size: 11px; color: #58a6ff; }
+
+/* ── Hero Band ── */
+.hero-band {
+  height: 132px;
+  background: #0d1117 center/cover no-repeat;
+  position: relative;
+}
+.hero-band-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #0d1117 6%, rgba(13,17,23,.5) 42%, rgba(13,17,23,.12) 80%);
+}
+.hero-band-content {
+  position: absolute;
+  bottom: 14px;
+  left: 18px;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+.hero-band-bar {
+  width: 4px;
+  height: 38px;
+  background: var(--racing-orange);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.hero-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--racing-orange);
+  margin-bottom: 3px;
+}
+.hero-title {
+  font-family: 'Saira', 'Segoe UI', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -.01em;
+  line-height: 1.1;
+}
+
+/* ── Step check (moved from inline) ── */
+.step-check { font-size:13px; color:#8b949e; display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:6px; }
+.step-check.running { color:#e6a700; background:rgba(230,167,0,.06); }
+.step-check.done { color:#3fb950; background:rgba(63,185,80,.06); }
+.step-check.error { color:#f85149; background:rgba(248,81,73,.06); }
+.chk-icon { font-size:14px; width:18px; text-align:center; }
 </style>
 </head>
 <body>
@@ -109,10 +167,10 @@ body { background: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', system-ui, 
     <div style="width:4px;height:36px;background:#ff6600;border-radius:2px;"></div>
     <div>
       <div style="display:flex;align-items:center;gap:8px;">
-        <span style="font-size:17px;font-weight:800;color:#e6edf3;letter-spacing:-.02em;">Horizon SimTool</span>
+        <span style="font-size:17px;font-weight:800;color:#e6edf3;letter-spacing:-.02em;">Horizon Wheel Wizard</span>
         <span style="font-size:10px;font-weight:700;background:rgba(255,102,0,.15);color:#ff6600;border:1px solid rgba(255,102,0,.3);border-radius:4px;padding:2px 7px;letter-spacing:.04em;">v1.0</span>
       </div>
-      <div style="font-size:11px;color:#8b949e;">First-time setup · follow the steps below</div>
+      <div style="font-size:11px;color:#8b949e;">First-time setup · follow the steps below to get on track</div>
     </div>
     <div style="margin-left:auto;">
       <button class="btn btn-secondary btn-sm" onclick="skipToMain()">Skip setup →</button>
@@ -131,10 +189,10 @@ body { background: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', system-ui, 
       <div class="step-dot pending" id="sdot-4">4</div>
     </div>
     <div style="display:flex;justify-content:space-between;max-width:640px;margin:6px auto 0;padding:0 4px;">
-      <span style="font-size:11px;color:#8b949e;font-weight:600;">Detect Wheel</span>
-      <span style="font-size:11px;color:#8b949e;font-weight:600;">Find Game</span>
-      <span style="font-size:11px;color:#8b949e;font-weight:600;">Map Controls</span>
-      <span style="font-size:11px;color:#8b949e;font-weight:600;">Install</span>
+      <span id="slabel-1" style="font-size:11px;color:var(--racing-orange);font-weight:600;">Detect Wheel</span>
+      <span id="slabel-2" style="font-size:11px;color:#8b949e;font-weight:600;">Find Game</span>
+      <span id="slabel-3" style="font-size:11px;color:#8b949e;font-weight:600;">Map Controls</span>
+      <span id="slabel-4" style="font-size:11px;color:#8b949e;font-weight:600;">Install</span>
     </div>
   </div>
 
@@ -143,7 +201,18 @@ body { background: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', system-ui, 
     <div style="max-width:640px;margin:0 auto;">
 
       <!-- ── STEP 1: Detect Wheel ── -->
-      <div id="step-1" class="card">
+      <div id="step-1" class="card" style="padding:0;overflow:hidden;">
+        <div class="hero-band" style="background-image:url('assets/photos/rally-swift.jpg')">
+          <div class="hero-band-overlay"></div>
+          <div class="hero-band-content">
+            <div class="hero-band-bar"></div>
+            <div>
+              <div class="hero-eyebrow">Forza Horizon · Wheel Setup</div>
+              <div class="hero-title">Built for the apex.</div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:20px;">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
           <div style="width:40px;height:40px;background:rgba(255,102,0,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="9"/><line x1="12" y1="15" x2="12" y2="22"/><line x1="2" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="22" y2="12"/></svg>
@@ -177,10 +246,22 @@ body { background: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', system-ui, 
           </button>
           <button class="btn btn-primary" id="s1-next" disabled onclick="goStep(2)">Continue →</button>
         </div>
+        </div><!-- /padding -->
       </div>
 
       <!-- ── STEP 2: Find Game ── -->
-      <div id="step-2" style="display:none;" class="card">
+      <div id="step-2" class="card" style="display:none;padding:0;overflow:hidden;">
+        <div class="hero-band" style="background-image:url('assets/photos/drift-eighty-six.jpg')">
+          <div class="hero-band-overlay"></div>
+          <div class="hero-band-content">
+            <div class="hero-band-bar"></div>
+            <div>
+              <div class="hero-eyebrow">Step 2 · Find the Game</div>
+              <div class="hero-title">Chase the perfect line.</div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:20px;">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
           <div style="width:40px;height:40px;background:rgba(255,102,0,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -217,10 +298,22 @@ body { background: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', system-ui, 
           </button>
           <button class="btn btn-primary" id="s2-next" disabled onclick="goStep(3)">Continue →</button>
         </div>
+        </div><!-- /padding -->
       </div>
 
       <!-- ── STEP 3: Map Controls ── -->
-      <div id="step-3" style="display:none;" class="card">
+      <div id="step-3" class="card" style="display:none;padding:0;overflow:hidden;">
+        <div class="hero-band" style="background-image:url('assets/photos/dtm-duel.jpg')">
+          <div class="hero-band-overlay"></div>
+          <div class="hero-band-content">
+            <div class="hero-band-bar"></div>
+            <div>
+              <div class="hero-eyebrow">Step 3 · Map the Controls</div>
+              <div class="hero-title">Every input, dialed in.</div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:20px;">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
           <div style="width:40px;height:40px;background:rgba(255,102,0,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
@@ -259,10 +352,22 @@ body { background: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', system-ui, 
           <button class="btn btn-primary" id="s3-next" style="display:none;" onclick="goStep(4)">Continue →</button>
           <button class="btn btn-secondary btn-sm" id="s3-skip" onclick="goStep(4)">Skip (use existing profile)</button>
         </div>
+        </div><!-- /padding -->
       </div>
 
       <!-- ── STEP 4: Generate & Install ── -->
-      <div id="step-4" style="display:none;" class="card">
+      <div id="step-4" class="card" style="display:none;padding:0;overflow:hidden;">
+        <div class="hero-band" style="background-image:url('assets/photos/wet-lap.jpg')">
+          <div class="hero-band-overlay"></div>
+          <div class="hero-band-content">
+            <div class="hero-band-bar"></div>
+            <div>
+              <div class="hero-eyebrow">Step 4 · Generate &amp; Install</div>
+              <div class="hero-title">Lights out. Send it.</div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:20px;">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
           <div style="width:40px;height:40px;background:rgba(255,102,0,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -331,6 +436,7 @@ body { background: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', system-ui, 
             Open Quick Remap →
           </button>
         </div>
+        </div><!-- /padding -->
       </div>
 
     </div>
@@ -348,8 +454,8 @@ body { background: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', system-ui, 
       <div style="display:flex;align-items:center;gap:9px;">
         <div style="width:4px;height:32px;background:#ff6600;border-radius:2px;flex-shrink:0;"></div>
         <div>
-          <div style="font-size:14px;font-weight:800;color:#e6edf3;letter-spacing:-.02em;">Horizon SimTool</div>
-          <div style="font-size:10px;color:#8b949e;">sim racing config</div>
+          <div style="font-size:14px;font-weight:800;color:#e6edf3;letter-spacing:-.02em;">Horizon Wheel Wizard</div>
+          <div style="font-size:10px;color:#8b949e;">wheel wizard · v1.0</div>
         </div>
       </div>
     </div>
@@ -618,6 +724,12 @@ function goStep(n) {
   const el = document.getElementById('step-'+n);
   if (el) el.style.display = 'block';
   S.wizardStep = n;
+
+  // Update step label colors
+  [1,2,3,4].forEach(i => {
+    const lbl = document.getElementById('slabel-'+i);
+    if (lbl) lbl.style.color = (i === n) ? '#ff6600' : '#8b949e';
+  });
 
   // Auto-run step logic
   if (n === 2) step2Scan();
