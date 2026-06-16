@@ -10,8 +10,16 @@
     <ApplicationIcon>Assets\HorizonSimTool.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <Version>26.6.5</Version>
+    <AssemblyVersion>26.6.5.0</AssemblyVersion>
+    <FileVersion>26.6.5.0</FileVersion>
+    <InformationalVersion>26.6.5</InformationalVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Include="Assets\HorizonSimTool.png" CopyToOutputDirectory="Never" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2903.40" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="wwwroot\**\*" CopyToOutputDirectory="Always" />
   </ItemGroup>
 </Project>

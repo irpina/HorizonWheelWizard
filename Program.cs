@@ -77,10 +77,12 @@ internal static class Program
             return 0;
         }
 
-        Application.Run(new MainForm());
+        Application.Run(new WebUIForm());
         GC.KeepAlive(singleInstance);
         return 0;
     }
+
+    public static string DefaultOutputFolder() => Path.Combine(AppContext.BaseDirectory, "output");
 
     private static int UnknownCommand(string command)
     {
@@ -868,14 +870,27 @@ internal static class DeviceEnumerator
         return devices;
     }
 
+    private static readonly string[] KnownSimBrands =
+    [
+        "moza", "simagic", "simsonn", "fanatec", "simucube", "thrustmaster",
+        "logitech g", "bemaster", "cammus", "accuforce", "leo bodnar",
+        "heusinkveld", "ricmotech", "cube controls", "asetek", "simline",
+        "vrs", "augury", "podium", "csl", "csp", "csr",
+    ];
+
     private static bool IsControllerDevice(DeviceInfo device)
     {
         var haystack = string.Join(" ", device.Name, device.ClassName, device.Manufacturer, device.InstanceId, device.HardwareId, device.CompatibleIds);
-        if (device.ClassName.Equals("USB", StringComparison.OrdinalIgnoreCase)
-            || haystack.Contains("USB Composite Device", StringComparison.OrdinalIgnoreCase)
-            || haystack.Contains("USB Host Controller", StringComparison.OrdinalIgnoreCase)
-            || haystack.Contains("HID-compliant system controller", StringComparison.OrdinalIgnoreCase)
-            || haystack.Contains("Logitech Gaming HID Device", StringComparison.OrdinalIgnoreCase))
+
+        // Always include known sim hardware brands regardless of class
+        var isKnownSimBrand = KnownSimBrands.Any(b => haystack.Contains(b, StringComparison.OrdinalIgnoreCase));
+
+        if (!isKnownSimBrand
+            && (device.ClassName.Equals("USB", StringComparison.OrdinalIgnoreCase)
+                || haystack.Contains("USB Composite Device", StringComparison.OrdinalIgnoreCase)
+                || haystack.Contains("USB Host Controller", StringComparison.OrdinalIgnoreCase)
+                || haystack.Contains("HID-compliant system controller", StringComparison.OrdinalIgnoreCase)
+                || haystack.Contains("Logitech Gaming HID Device", StringComparison.OrdinalIgnoreCase)))
         {
             return false;
         }
