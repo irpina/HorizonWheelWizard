@@ -20,527 +20,512 @@ tailwind.config = {
         'racing-green':  '#3fb950',
         'racing-red':    '#f85149',
         'racing-blue':   '#58a6ff',
-      },
-      fontFamily: {
-        sans: ['Segoe UI', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Consolas', 'monospace'],
       }
     }
   }
 }
 </script>
 <style>
-  * { box-sizing: border-box; }
-  html, body { height: 100%; margin: 0; overflow: hidden; }
-  body { background: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', system-ui, sans-serif; }
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: #161b22; }
-  ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #484f58; }
-  .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 8px; cursor: pointer; color: #8b949e; font-size: 14px; font-weight: 500; transition: all .15s; user-select: none; }
-  .nav-item:hover { background: #1c2230; color: #e6edf3; }
-  .nav-item.active { background: rgba(255,102,0,.15); color: #ff6600; border-left: 3px solid #ff6600; }
-  .nav-item svg { flex-shrink: 0; }
-  .card { background: #1c2230; border: 1px solid #30363d; border-radius: 10px; padding: 18px; }
-  .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-  .status-ok   { background: rgba(63,185,80,.15); color: #3fb950; }
-  .status-warn { background: rgba(230,167,0,.15);  color: #e6a700; }
-  .status-err  { background: rgba(248,81,73,.15);  color: #f85149; }
-  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all .15s; user-select: none; }
-  .btn-primary  { background: #ff6600; color: #fff; }
-  .btn-primary:hover  { background: #e05800; }
-  .btn-secondary { background: #21262d; color: #c9d1d9; border: 1px solid #30363d; }
-  .btn-secondary:hover { background: #2d333b; }
-  .btn-danger   { background: rgba(248,81,73,.15); color: #f85149; border: 1px solid rgba(248,81,73,.3); }
-  .btn-danger:hover { background: rgba(248,81,73,.25); }
-  .btn-green    { background: rgba(63,185,80,.15); color: #3fb950; border: 1px solid rgba(63,185,80,.3); }
-  .btn-green:hover { background: rgba(63,185,80,.25); }
-  .btn:disabled { opacity: .45; cursor: not-allowed; }
-  .input-field { background: #0d1117; border: 1px solid #30363d; border-radius: 7px; padding: 8px 12px; color: #c9d1d9; font-size: 13px; width: 100%; outline: none; transition: border-color .15s; }
-  .input-field:focus { border-color: #ff6600; }
-  .input-field.ok   { border-color: rgba(63,185,80,.5); background: rgba(63,185,80,.05); color: #3fb950; }
-  .input-field.warn { border-color: rgba(230,167,0,.4); background: rgba(230,167,0,.05); color: #e6a700; }
-  .label { font-size: 12px; color: #8b949e; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; display: block; }
-  .grid-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .grid-table th { background: #0d1117; color: #8b949e; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; padding: 10px 12px; text-align: left; border-bottom: 1px solid #30363d; }
-  .grid-table td { padding: 9px 12px; border-bottom: 1px solid rgba(48,54,61,.5); }
-  .grid-table tr:hover td { background: rgba(255,255,255,.03); }
-  .grid-table .vid-pid { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 12px; color: #58a6ff; }
-  .log-area { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 12px; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 12px; color: #8b949e; height: 200px; overflow-y: auto; white-space: pre-wrap; }
-  .section-title { font-size: 15px; font-weight: 700; color: #e6edf3; margin-bottom: 2px; }
-  .section-sub   { font-size: 12px; color: #8b949e; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-  .dot-green  { background: #3fb950; box-shadow: 0 0 6px rgba(63,185,80,.5); }
-  .dot-orange { background: #ff6600; box-shadow: 0 0 6px rgba(255,102,0,.5); }
-  .dot-red    { background: #f85149; box-shadow: 0 0 6px rgba(248,81,73,.5); }
-  .dot-gray   { background: #484f58; }
-  .spinner { border: 2px solid #30363d; border-top-color: #ff6600; border-radius: 50%; width: 16px; height: 16px; animation: spin .7s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .step-card { border: 1px solid #30363d; border-radius: 10px; padding: 16px; margin-bottom: 12px; background: #1c2230; }
-  .step-card.active { border-color: #ff6600; background: rgba(255,102,0,.05); }
-  .step-card.done   { border-color: rgba(63,185,80,.4); }
-  .wizard-progress { display: flex; gap: 4px; margin-bottom: 20px; }
-  .wizard-progress .seg { height: 4px; flex: 1; background: #30363d; border-radius: 2px; transition: background .3s; }
-  .wizard-progress .seg.done { background: #3fb950; }
-  .wizard-progress .seg.active { background: #ff6600; }
-  .toast { position: fixed; bottom: 20px; right: 20px; padding: 12px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; z-index: 9999; opacity: 0; transition: opacity .3s; pointer-events: none; }
-  .toast.show { opacity: 1; }
-  .toast.success { background: rgba(63,185,80,.9); color: #fff; }
-  .toast.error   { background: rgba(248,81,73,.9); color: #fff; }
-  .toast.info    { background: rgba(88,166,255,.9); color: #fff; }
-  select.input-field { cursor: pointer; }
-  option { background: #1c2230; }
-  .checkbox-wrap { display: flex; align-items: center; gap: 8px; cursor: pointer; }
-  .checkbox-wrap input[type=checkbox] { width: 16px; height: 16px; accent-color: #ff6600; cursor: pointer; }
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; overflow: hidden; }
+body { background: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', system-ui, sans-serif; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #161b22; }
+::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #484f58; }
+
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all .15s; user-select: none; }
+.btn-primary  { background: #ff6600; color: #fff; }
+.btn-primary:hover  { background: #e05800; }
+.btn-primary:disabled { background: #6b3300; color: #9a6040; cursor: not-allowed; }
+.btn-secondary { background: #21262d; color: #c9d1d9; border: 1px solid #30363d; }
+.btn-secondary:hover { background: #2d333b; }
+.btn-green  { background: rgba(63,185,80,.15); color: #3fb950; border: 1px solid rgba(63,185,80,.3); }
+.btn-green:hover { background: rgba(63,185,80,.25); }
+.btn-danger { background: rgba(248,81,73,.12); color: #f85149; border: 1px solid rgba(248,81,73,.3); }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+
+.card { background: #1c2230; border: 1px solid #30363d; border-radius: 10px; padding: 20px; }
+.card-sm { background: #1c2230; border: 1px solid #30363d; border-radius: 8px; padding: 14px; }
+
+.input-field { background: #0d1117; border: 1px solid #30363d; border-radius: 7px; padding: 9px 13px; color: #c9d1d9; font-size: 13px; width: 100%; outline: none; transition: border-color .15s; }
+.input-field:focus { border-color: #ff6600; }
+.input-field.ok   { border-color: rgba(63,185,80,.5); color: #3fb950; }
+.input-field.warn { border-color: rgba(230,167,0,.4);  color: #e6a700; }
+.label { font-size: 11px; color: #8b949e; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 5px; display: block; }
+
+.step-dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; transition: all .3s; }
+.step-dot.pending  { background: #21262d; color: #8b949e; border: 2px solid #30363d; }
+.step-dot.active   { background: #ff6600; color: #fff; }
+.step-dot.done     { background: rgba(63,185,80,.2); color: #3fb950; border: 2px solid rgba(63,185,80,.4); }
+.step-line { flex: 1; height: 2px; background: #30363d; margin: 0 6px; transition: background .3s; }
+.step-line.done { background: rgba(63,185,80,.4); }
+
+.status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.badge-ok   { background: rgba(63,185,80,.15); color: #3fb950; }
+.badge-warn { background: rgba(230,167,0,.15);  color: #e6a700; }
+.badge-err  { background: rgba(248,81,73,.12);  color: #f85149; }
+.badge-blue { background: rgba(88,166,255,.12); color: #58a6ff; }
+
+.device-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 14px 16px; cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 12px; }
+.device-card:hover { border-color: #484f58; background: #1c2230; }
+.device-card.selected { border-color: #ff6600; background: rgba(255,102,0,.08); }
+.device-card .radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #30363d; flex-shrink: 0; transition: all .15s; }
+.device-card.selected .radio { border-color: #ff6600; background: #ff6600; box-shadow: 0 0 0 4px rgba(255,102,0,.2); }
+
+.remap-cell { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px; cursor: pointer; transition: all .15s; position: relative; }
+.remap-cell:hover { border-color: #58a6ff; background: #1c2230; }
+.remap-cell:hover .remap-btn { opacity: 1; }
+.remap-cell .remap-btn { opacity: 0; transition: opacity .15s; }
+.remap-cell.capturing { border-color: #ff6600; background: rgba(255,102,0,.05); animation: pulse-border 1s ease-in-out infinite; }
+@keyframes pulse-border { 0%,100%{ border-color: #ff6600; } 50%{ border-color: rgba(255,102,0,.4); } }
+
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-radius: 7px; cursor: pointer; color: #8b949e; font-size: 13px; font-weight: 500; transition: all .15s; user-select: none; }
+.nav-item:hover { background: #1c2230; color: #e6edf3; }
+.nav-item.active { background: rgba(255,102,0,.12); color: #ff6600; border-left: 3px solid #ff6600; padding-left: 11px; }
+
+.log-area { background: #0d1117; border: 1px solid #30363d; border-radius: 7px; padding: 10px; font-family: Consolas, monospace; font-size: 11px; color: #8b949e; height: 140px; overflow-y: auto; white-space: pre-wrap; }
+.spinner { width: 18px; height: 18px; border: 2px solid #30363d; border-top-color: #ff6600; border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.toast { position: fixed; bottom: 20px; right: 20px; padding: 12px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; z-index: 9999; opacity: 0; transition: opacity .3s; pointer-events: none; max-width: 360px; }
+.toast.show { opacity: 1; }
+.toast.success { background: rgba(63,185,80,.92); color: #fff; }
+.toast.error   { background: rgba(248,81,73,.92); color: #fff; }
+.toast.info    { background: rgba(88,166,255,.92); color: #fff; }
+
+.vid-pid { font-family: Consolas, monospace; font-size: 11px; color: #58a6ff; }
 </style>
 </head>
 <body>
-<div style="display:flex;height:100vh;overflow:hidden;" id="app">
 
-  <!-- SIDEBAR -->
-  <aside style="width:220px;min-width:220px;background:#161b22;border-right:1px solid #30363d;display:flex;flex-direction:column;overflow:hidden;">
-    <!-- Logo -->
-    <div style="padding:18px 16px 14px;border-bottom:1px solid #30363d;">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:4px;height:36px;background:#ff6600;border-radius:2px;flex-shrink:0;"></div>
+<!-- ═══════════════════════════════════════════════════
+     WIZARD VIEW  (shown during initial setup)
+═══════════════════════════════════════════════════ -->
+<div id="wizard-view" style="height:100vh;display:flex;flex-direction:column;overflow:hidden;">
+
+  <!-- Header -->
+  <div style="padding:18px 32px;border-bottom:1px solid #30363d;background:#161b22;display:flex;align-items:center;gap:14px;flex-shrink:0;">
+    <div style="width:4px;height:36px;background:#ff6600;border-radius:2px;"></div>
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:17px;font-weight:800;color:#e6edf3;letter-spacing:-.02em;">Horizon SimTool</span>
+        <span style="font-size:10px;font-weight:700;background:rgba(255,102,0,.15);color:#ff6600;border:1px solid rgba(255,102,0,.3);border-radius:4px;padding:2px 7px;letter-spacing:.04em;">v26.6.5</span>
+      </div>
+      <div style="font-size:11px;color:#8b949e;">First-time setup · follow the steps below</div>
+    </div>
+    <div style="margin-left:auto;">
+      <button class="btn btn-secondary btn-sm" onclick="skipToMain()">Skip setup →</button>
+    </div>
+  </div>
+
+  <!-- Step progress bar -->
+  <div style="padding:20px 32px 0;flex-shrink:0;">
+    <div style="display:flex;align-items:center;max-width:640px;margin:0 auto;">
+      <div class="step-dot" id="sdot-1">1</div>
+      <div class="step-line" id="sline-1"></div>
+      <div class="step-dot pending" id="sdot-2">2</div>
+      <div class="step-line" id="sline-2"></div>
+      <div class="step-dot pending" id="sdot-3">3</div>
+      <div class="step-line" id="sline-3"></div>
+      <div class="step-dot pending" id="sdot-4">4</div>
+    </div>
+    <div style="display:flex;justify-content:space-between;max-width:640px;margin:6px auto 0;padding:0 4px;">
+      <span style="font-size:11px;color:#8b949e;font-weight:600;">Detect Wheel</span>
+      <span style="font-size:11px;color:#8b949e;font-weight:600;">Find Game</span>
+      <span style="font-size:11px;color:#8b949e;font-weight:600;">Map Controls</span>
+      <span style="font-size:11px;color:#8b949e;font-weight:600;">Install</span>
+    </div>
+  </div>
+
+  <!-- Step content -->
+  <div style="flex:1;overflow-y:auto;padding:24px 32px 32px;">
+    <div style="max-width:640px;margin:0 auto;">
+
+      <!-- ── STEP 1: Detect Wheel ── -->
+      <div id="step-1" class="card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+          <div style="width:40px;height:40px;background:rgba(255,102,0,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="9"/><line x1="12" y1="15" x2="12" y2="22"/><line x1="2" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="22" y2="12"/></svg>
+          </div>
+          <div>
+            <div style="font-size:16px;font-weight:700;color:#e6edf3;">Step 1 — Detect Your Wheel</div>
+            <div style="font-size:12px;color:#8b949e;margin-top:2px;">Select your wheelbase / primary controller</div>
+          </div>
+          <div id="s1-scanning" class="spinner" style="margin-left:auto;"></div>
+        </div>
+
+        <div id="s1-device-list" style="display:flex;flex-direction:column;gap:8px;min-height:60px;margin-bottom:16px;">
+          <div style="color:#8b949e;font-size:13px;padding:16px 0;">Scanning for controllers...</div>
+        </div>
+
+        <div id="s1-no-devices" style="display:none;background:rgba(230,167,0,.08);border:1px solid rgba(230,167,0,.25);border-radius:8px;padding:12px 14px;font-size:13px;color:#e6a700;margin-bottom:14px;">
+          No controllers detected. Make sure your wheel is connected and powered on, then
+          <a onclick="step1Scan()" style="color:#ff6600;cursor:pointer;text-decoration:underline;">scan again</a>.
+        </div>
+
+        <div id="s1-show-all-hint" style="display:none;margin-bottom:10px;">
+          <a onclick="step1ShowAll()" style="font-size:12px;color:#58a6ff;cursor:pointer;text-decoration:underline;">
+            My wheel isn't listed — show all HID devices
+          </a>
+        </div>
+
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button class="btn btn-secondary btn-sm" onclick="step1Scan()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+            Rescan
+          </button>
+          <button class="btn btn-primary" id="s1-next" disabled onclick="goStep(2)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 2: Find Game ── -->
+      <div id="step-2" style="display:none;" class="card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+          <div style="width:40px;height:40px;background:rgba(255,102,0,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div>
+            <div style="font-size:16px;font-weight:700;color:#e6edf3;">Step 2 — Find Forza Install</div>
+            <div style="font-size:12px;color:#8b949e;margin-top:2px;">Locating your game media folder</div>
+          </div>
+          <div id="s2-scanning" class="spinner" style="margin-left:auto;display:none;"></div>
+        </div>
+
+        <div id="s2-found-box" style="display:none;background:rgba(63,185,80,.07);border:1px solid rgba(63,185,80,.25);border-radius:8px;padding:14px;margin-bottom:14px;">
+          <div style="font-size:12px;font-weight:700;color:#3fb950;margin-bottom:4px;">✓ Game install found</div>
+          <div id="s2-found-path" style="font-size:12px;color:#8b949e;word-break:break-all;"></div>
+        </div>
+
+        <div id="s2-notfound-box" style="display:none;background:rgba(230,167,0,.08);border:1px solid rgba(230,167,0,.25);border-radius:8px;padding:12px 14px;font-size:13px;color:#e6a700;margin-bottom:14px;">
+          Game not found automatically. Browse to the media folder manually.
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <label class="label">Media folder path</label>
+          <div style="display:flex;gap:8px;">
+            <input class="input-field" id="s2-path" type="text" placeholder="e.g. C:\XboxGames\Forza Horizon 6\Content\media" />
+            <button class="btn btn-secondary btn-sm" style="white-space:nowrap;" onclick="step2Browse()">Browse</button>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button class="btn btn-secondary btn-sm" onclick="goStep(1)">← Back</button>
+          <button class="btn btn-secondary btn-sm" onclick="step2Scan()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+            Rescan
+          </button>
+          <button class="btn btn-primary" id="s2-next" disabled onclick="goStep(3)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: Map Controls ── -->
+      <div id="step-3" style="display:none;" class="card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+          <div style="width:40px;height:40px;background:rgba(255,102,0,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+          </div>
+          <div>
+            <div style="font-size:16px;font-weight:700;color:#e6edf3;">Step 3 — Map Your Controls</div>
+            <div style="font-size:12px;color:#8b949e;margin-top:2px;">Press each input when prompted — 26 bindings total</div>
+          </div>
+        </div>
+
+        <div class="card-sm" style="margin-bottom:16px;background:#0d1117;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#8b949e;margin-bottom:10px;">What gets mapped</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;color:#c9d1d9;">
+            <div>• Steering axis</div>
+            <div>• Throttle / Brake / Clutch</div>
+            <div>• Shift Up / Shift Down paddles</div>
+            <div>• Handbrake, Horn</div>
+            <div>• A / B / X / Y face buttons</div>
+            <div>• D-Pad all directions</div>
+            <div>• Pause, Back, Map, Camera</div>
+            <div>• Rewind, Radio, Quickchat...</div>
+          </div>
+        </div>
+
+        <div id="s3-result" style="display:none;background:rgba(63,185,80,.07);border:1px solid rgba(63,185,80,.25);border-radius:8px;padding:12px 14px;margin-bottom:14px;">
+          <div style="font-size:12px;font-weight:700;color:#3fb950;margin-bottom:2px;">✓ Mapping complete</div>
+          <div id="s3-result-text" style="font-size:12px;color:#8b949e;"></div>
+        </div>
+
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button class="btn btn-secondary btn-sm" onclick="goStep(2)">← Back</button>
+          <button class="btn btn-primary" onclick="step3Launch()" id="s3-launch-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Launch Mapping Wizard
+          </button>
+          <button class="btn btn-primary" id="s3-next" style="display:none;" onclick="goStep(4)">Continue →</button>
+          <button class="btn btn-secondary btn-sm" id="s3-skip" onclick="goStep(4)">Skip (use existing profile)</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 4: Generate & Install ── -->
+      <div id="step-4" style="display:none;" class="card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+          <div style="width:40px;height:40px;background:rgba(255,102,0,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </div>
+          <div>
+            <div style="font-size:16px;font-weight:700;color:#e6edf3;">Step 4 — Generate &amp; Install</div>
+            <div style="font-size:12px;color:#8b949e;margin-top:2px;">Backup → build patched ZIP → install to game folder</div>
+          </div>
+        </div>
+
+        <!-- Config summary -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+          <div class="card-sm" style="background:#0d1117;">
+            <div class="label">Wheelbase</div>
+            <div id="s4-wheel-name" style="font-size:13px;color:#e6edf3;word-break:break-all;">—</div>
+            <div id="s4-wheel-vid" class="vid-pid" style="margin-top:2px;">—</div>
+          </div>
+          <div class="card-sm" style="background:#0d1117;">
+            <div class="label">Game install</div>
+            <div id="s4-install-path" style="font-size:12px;color:#e6edf3;word-break:break-all;">—</div>
+          </div>
+        </div>
+
+        <!-- Profile selection -->
+        <div style="margin-bottom:14px;">
+          <label class="label">XML profile to patch</label>
+          <select class="input-field" id="s4-profile-combo">
+            <option value="">Loading profiles...</option>
+          </select>
+        </div>
+
+        <!-- Steps checklist -->
+        <div style="margin-bottom:16px;display:flex;flex-direction:column;gap:6px;">
+          <div class="step-check" id="chk-backup">
+            <span class="chk-icon">○</span> Create HST-BACKUP (backs up original game ZIPs)
+          </div>
+          <div class="step-check" id="chk-generate">
+            <span class="chk-icon">○</span> Generate patched inputmappingprofiles.zip
+          </div>
+          <div class="step-check" id="chk-install">
+            <span class="chk-icon">○</span> Install to game media folder
+          </div>
+        </div>
+        <style>
+          .step-check { font-size:13px; color:#8b949e; display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:6px; }
+          .step-check.running { color:#e6a700; background:rgba(230,167,0,.06); }
+          .step-check.done { color:#3fb950; background:rgba(63,185,80,.06); }
+          .step-check.error { color:#f85149; background:rgba(248,81,73,.06); }
+          .chk-icon { font-size:14px; width:18px; text-align:center; }
+        </style>
+
+        <div id="s4-log" class="log-area" style="margin-bottom:14px;display:none;"></div>
+
+        <div id="s4-success" style="display:none;background:rgba(63,185,80,.08);border:1px solid rgba(63,185,80,.3);border-radius:8px;padding:14px;margin-bottom:14px;text-align:center;">
+          <div style="font-size:18px;font-weight:800;color:#3fb950;margin-bottom:4px;">✓ All done!</div>
+          <div style="font-size:13px;color:#8b949e;">Your Forza Horizon input profile has been installed. Launch the game and test your controls.</div>
+        </div>
+
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button class="btn btn-secondary btn-sm" onclick="goStep(3)">← Back</button>
+          <button class="btn btn-primary" id="s4-go-btn" onclick="step4Run()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+            Backup, Generate &amp; Install
+          </button>
+          <button class="btn btn-green" id="s4-done-btn" style="display:none;" onclick="finishSetup()">
+            Open Quick Remap →
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     MAIN VIEW  (shown after setup is complete)
+═══════════════════════════════════════════════════ -->
+<div id="main-view" style="display:none;height:100vh;display:none;overflow:hidden;flex-direction:row;">
+
+  <!-- Sidebar -->
+  <aside style="width:210px;min-width:210px;background:#161b22;border-right:1px solid #30363d;display:flex;flex-direction:column;">
+    <div style="padding:16px 14px 12px;border-bottom:1px solid #30363d;">
+      <div style="display:flex;align-items:center;gap:9px;">
+        <div style="width:4px;height:32px;background:#ff6600;border-radius:2px;flex-shrink:0;"></div>
         <div>
-          <div style="font-size:15px;font-weight:800;color:#e6edf3;letter-spacing:-.02em;">Horizon SimTool</div>
-          <div style="font-size:11px;color:#8b949e;">sim racing config</div>
+          <div style="font-size:14px;font-weight:800;color:#e6edf3;letter-spacing:-.02em;">Horizon SimTool</div>
+          <div style="font-size:10px;color:#8b949e;">sim racing config</div>
         </div>
       </div>
     </div>
-
-    <!-- Nav -->
-    <nav style="flex:1;padding:10px 8px;overflow-y:auto;">
-      <div class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        Dashboard
+    <nav style="flex:1;padding:8px 6px;overflow-y:auto;">
+      <div class="nav-item active" onclick="showMain('overview')" id="mnav-overview">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Overview
       </div>
-      <div class="nav-item" onclick="showPage('devices')" id="nav-devices">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
-        Devices
+      <div class="nav-item" onclick="showMain('remap')" id="mnav-remap">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="9"/><line x1="12" y1="15" x2="12" y2="22"/><line x1="2" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="22" y2="12"/></svg>
+        Quick Remap
       </div>
-      <div class="nav-item" onclick="showPage('mapwheel')" id="nav-mapwheel">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="9"/><line x1="12" y1="15" x2="12" y2="22"/><line x1="2" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="22" y2="12"/></svg>
-        Map Wheel
-      </div>
-      <div class="nav-item" onclick="showPage('profiles')" id="nav-profiles">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        Profiles
-      </div>
-      <div class="nav-item" onclick="showPage('generate')" id="nav-generate">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      <div class="nav-item" onclick="showMain('generate')" id="mnav-generate">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Generate &amp; Install
       </div>
-      <div class="nav-item" onclick="showPage('silence')" id="nav-silence">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 005.12 2.12M15 9.34V4a3 3 0 00-5.94-.6"/><path d="M17 16.95A7 7 0 015 12v-2m14 0v2a7 7 0 01-.11 1.23"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-        Silence
+      <div class="nav-item" onclick="showMain('advanced')" id="mnav-advanced">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M2 12h2M20 12h2M17.66 17.66l-1.41-1.41M6.34 17.66l1.41-1.41"/></svg>
+        Advanced
       </div>
     </nav>
-
-    <!-- Bottom status -->
-    <div style="padding:12px 16px;border-top:1px solid #30363d;">
-      <div id="sidebar-status" style="font-size:11px;color:#8b949e;display:flex;align-items:center;gap:6px;">
-        <span class="dot dot-gray" id="status-dot"></span>
-        <span id="status-text">Initializing...</span>
-      </div>
+    <div style="padding:10px 14px;border-top:1px solid #30363d;display:flex;flex-direction:column;gap:8px;">
+      <button class="btn btn-secondary btn-sm" style="width:100%;justify-content:center;" onclick="rerunSetup()">↺ Re-run Setup</button>
+      <div style="text-align:center;font-size:10px;color:#484f58;font-weight:600;letter-spacing:.04em;">v26.6.5</div>
     </div>
   </aside>
 
-  <!-- MAIN CONTENT -->
-  <main style="flex:1;overflow-y:auto;overflow-x:hidden;background:#0d1117;">
+  <!-- Main panel -->
+  <div style="flex:1;overflow-y:auto;overflow-x:hidden;background:#0d1117;">
 
-    <!-- DASHBOARD PAGE -->
-    <div id="page-dashboard" class="page" style="padding:24px;">
-      <div style="margin-bottom:24px;">
-        <div class="section-title">Dashboard</div>
-        <div class="section-sub">System overview and quick actions</div>
-      </div>
-
-      <!-- Quick status cards -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px;">
-        <div class="card">
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#8b949e;margin-bottom:10px;">Devices</div>
-          <div id="dash-devices-count" style="font-size:28px;font-weight:800;color:#e6edf3;">—</div>
-          <div id="dash-devices-sub" style="font-size:12px;color:#8b949e;margin-top:4px;">Loading...</div>
-        </div>
-        <div class="card">
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#8b949e;margin-bottom:10px;">Wheelbase</div>
-          <div id="dash-wheel-name" style="font-size:13px;font-weight:700;color:#e6edf3;word-break:break-all;">—</div>
-          <div id="dash-wheel-vid" class="vid-pid" style="font-size:11px;margin-top:4px;color:#58a6ff;">—</div>
-        </div>
-        <div class="card">
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#8b949e;margin-bottom:10px;">Game Install</div>
-          <div id="dash-install-status" class="status-badge status-warn" style="font-size:12px;">Not detected</div>
-          <div id="dash-install-path" style="font-size:11px;color:#8b949e;margin-top:6px;word-break:break-all;"></div>
-        </div>
-        <div class="card">
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#8b949e;margin-bottom:10px;">Profile</div>
-          <div id="dash-profile-name" style="font-size:13px;font-weight:700;color:#e6edf3;">—</div>
-          <div id="dash-profile-sub" style="font-size:12px;color:#8b949e;margin-top:4px;">No profile loaded</div>
-        </div>
-      </div>
-
-      <!-- Quick actions -->
-      <div class="card" style="margin-bottom:20px;">
-        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:14px;">Quick Actions</div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;">
-          <button class="btn btn-secondary" onclick="refreshDevices()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
-            Refresh Devices
-          </button>
-          <button class="btn btn-secondary" onclick="findInstall()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            Find Game Install
-          </button>
-          <button class="btn btn-primary" onclick="showPage('mapwheel')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
-            Map Wheel
-          </button>
-          <button class="btn btn-secondary" onclick="showPage('generate')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
-            Generate &amp; Install
-          </button>
-        </div>
-      </div>
-
-      <!-- Role summary -->
-      <div class="card">
-        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:14px;">Configured Roles</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;" id="dash-roles">
-          <div class="role-row" data-role="wheelbase">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8b949e;">Wheelbase / FFB</div>
-            <div style="font-size:13px;color:#e6edf3;margin-top:4px;" id="role-wheelbase">—</div>
-          </div>
-          <div class="role-row" data-role="pedals">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8b949e;">Pedals</div>
-            <div style="font-size:13px;color:#e6edf3;margin-top:4px;" id="role-pedals">Optional</div>
-          </div>
-          <div class="role-row" data-role="shifter">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8b949e;">Shifter</div>
-            <div style="font-size:13px;color:#e6edf3;margin-top:4px;" id="role-shifter">Optional</div>
-          </div>
-          <div class="role-row" data-role="handbrake">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8b949e;">Handbrake</div>
-            <div style="font-size:13px;color:#e6edf3;margin-top:4px;" id="role-handbrake">Optional</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- DEVICES PAGE -->
-    <div id="page-devices" class="page" style="padding:24px;display:none;">
-      <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;">
-        <div>
-          <div class="section-title">Devices</div>
-          <div class="section-sub">Connected controllers and input devices</div>
-        </div>
-        <div style="display:flex;gap:8px;">
-          <button class="btn btn-secondary" onclick="refreshDevices()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
-            Refresh
-          </button>
-        </div>
-      </div>
-
-      <!-- Role assignment -->
-      <div class="card" style="margin-bottom:16px;">
-        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:14px;">Device Role Assignment</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div>
-            <label class="label">Wheelbase / FFB <span style="color:#f85149">*</span></label>
-            <select class="input-field" id="combo-wheelbase" onchange="onRoleChange()">
-              <option value="">Select device...</option>
-            </select>
-          </div>
-          <div>
-            <label class="label">Pedals</label>
-            <select class="input-field" id="combo-pedals" onchange="onRoleChange()">
-              <option value="">None / same as wheelbase</option>
-            </select>
-          </div>
-          <div>
-            <label class="label">Shifter</label>
-            <select class="input-field" id="combo-shifter" onchange="onRoleChange()">
-              <option value="">None</option>
-            </select>
-          </div>
-          <div>
-            <label class="label">Handbrake</label>
-            <select class="input-field" id="combo-handbrake" onchange="onRoleChange()">
-              <option value="">None</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- Device grid -->
-      <div class="card">
-        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:12px;" id="devices-count-label">All Devices</div>
-        <div style="overflow-x:auto;">
-          <table class="grid-table">
-            <thead>
-              <tr>
-                <th>Device</th>
-                <th>VID</th>
-                <th>PID</th>
-                <th>XML Value</th>
-                <th>Class</th>
-                <th>Name Source</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="devices-tbody">
-              <tr><td colspan="7" style="text-align:center;color:#8b949e;padding:24px;">Loading devices...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- MAP WHEEL PAGE -->
-    <div id="page-mapwheel" class="page" style="padding:24px;display:none;">
+    <!-- OVERVIEW -->
+    <div id="mpanel-overview" class="mpanel" style="padding:24px;">
       <div style="margin-bottom:20px;">
-        <div class="section-title">Map Wheel</div>
-        <div class="section-sub">Launch the wheel mapping wizard to assign inputs</div>
+        <div style="font-size:17px;font-weight:700;color:#e6edf3;">Overview</div>
+        <div style="font-size:12px;color:#8b949e;margin-top:2px;">Your current sim racing configuration</div>
       </div>
-
-      <div class="card" style="max-width:600px;">
-        <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px;">
-          <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,102,0,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="9"/><line x1="12" y1="15" x2="12" y2="22"/><line x1="2" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="22" y2="12"/></svg>
-          </div>
-          <div>
-            <div style="font-size:15px;font-weight:700;color:#e6edf3;margin-bottom:6px;">Wheel Mapping Wizard</div>
-            <div style="font-size:13px;color:#8b949e;line-height:1.6;">
-              The wizard walks you through pressing each pedal and button to map all 26 inputs including steering, pedals, paddles, buttons, and map/view. It supports multiple USB devices (e.g. MOZA wheelbase + SIMSONN pedals) simultaneously.
-            </div>
-          </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:20px;">
+        <div class="card-sm">
+          <div class="label">Wheelbase</div>
+          <div id="ov-wheel-name" style="font-size:13px;font-weight:600;color:#e6edf3;margin-top:4px;">—</div>
+          <div id="ov-wheel-vid" class="vid-pid" style="margin-top:3px;">—</div>
         </div>
-
-        <div style="background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:14px;margin-bottom:16px;">
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8b949e;margin-bottom:10px;">Before you start</div>
-          <ul style="font-size:13px;color:#8b949e;list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
-            <li style="display:flex;align-items:center;gap:8px;"><span style="color:#3fb950">✓</span> Wheelbase must be assigned in Device Roles</li>
-            <li style="display:flex;align-items:center;gap:8px;"><span style="color:#3fb950">✓</span> Connect all devices before launching</li>
-            <li style="display:flex;align-items:center;gap:8px;"><span style="color:#3fb950">✓</span> Center your steering wheel before starting</li>
-            <li style="display:flex;align-items:center;gap:8px;"><span style="color:#ff6600">→</span> Input mapping profile will be generated automatically</li>
-          </ul>
+        <div class="card-sm">
+          <div class="label">Game Install</div>
+          <div id="ov-install" style="font-size:12px;color:#e6edf3;margin-top:4px;word-break:break-all;">—</div>
         </div>
-
-        <div id="wizard-prereq-warn" style="display:none;background:rgba(230,167,0,.1);border:1px solid rgba(230,167,0,.3);border-radius:8px;padding:12px;margin-bottom:16px;font-size:13px;color:#e6a700;">
-          ⚠ Assign a wheelbase device first in the Devices tab.
+        <div class="card-sm">
+          <div class="label">Mapped Inputs</div>
+          <div id="ov-inputs-count" style="font-size:24px;font-weight:800;color:#e6edf3;margin-top:4px;">—</div>
+          <div style="font-size:11px;color:#8b949e;margin-top:2px;">of 26 total</div>
         </div>
-
-        <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="launchWizard()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          Launch Mapping Wizard
+        <div class="card-sm">
+          <div class="label">Backup</div>
+          <div id="ov-backup-status" class="status-badge badge-warn" style="margin-top:6px;">Unknown</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-secondary btn-sm" onclick="showMain('remap')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+          Quick Remap
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="showMain('generate')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+          Generate &amp; Install Again
         </button>
       </div>
-
-      <!-- Last mapping result -->
-      <div class="card" style="max-width:600px;margin-top:14px;">
-        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:12px;">Last Mapping Result</div>
-        <div id="wizard-result" style="font-size:13px;color:#8b949e;">No mapping session completed yet.</div>
-      </div>
     </div>
 
-    <!-- PROFILES PAGE -->
-    <div id="page-profiles" class="page" style="padding:24px;display:none;">
-      <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;">
+    <!-- QUICK REMAP -->
+    <div id="mpanel-remap" class="mpanel" style="padding:24px;display:none;">
+      <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
         <div>
-          <div class="section-title">Profiles</div>
-          <div class="section-sub">XML input mapping profiles from the game zip</div>
+          <div style="font-size:17px;font-weight:700;color:#e6edf3;">Quick Remap</div>
+          <div style="font-size:12px;color:#8b949e;margin-top:2px;">Click any binding to remap that single input</div>
         </div>
+        <button class="btn btn-secondary btn-sm" onclick="remapAll()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+          Remap All (Full Wizard)
+        </button>
       </div>
-
-      <!-- Source files -->
-      <div class="card" style="margin-bottom:16px;">
-        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:14px;">Source Files</div>
-        <div style="display:grid;grid-template-columns:1fr;gap:12px;">
-          <div>
-            <label class="label">Game Media Folder</label>
-            <div style="display:flex;gap:8px;">
-              <input class="input-field" id="media-folder" type="text" placeholder="C:\...\Forza Horizon 6\Content\media" oninput="onMediaFolderChange()" />
-              <button class="btn btn-secondary" onclick="browseMediaFolder()">Browse</button>
-              <button class="btn btn-secondary" onclick="findInstall()">Find</button>
-            </div>
-          </div>
-          <div>
-            <label class="label">Input Mapping ZIP</label>
-            <div style="display:flex;gap:8px;">
-              <input class="input-field" id="input-zip" type="text" placeholder="inputmappingprofiles.zip" />
-              <button class="btn btn-secondary" onclick="browseInputZip()">Browse</button>
-              <button class="btn btn-secondary" onclick="loadProfiles()">Load</button>
-            </div>
-          </div>
-          <div>
-            <label class="label">Wheel Tune ZIP <span style="color:#8b949e;font-weight:400;text-transform:none;letter-spacing:0;">(for FFB tuning)</span></label>
-            <div style="display:flex;gap:8px;">
-              <input class="input-field" id="wheel-zip" type="text" placeholder="wheeltunablesettingspc.zip" />
-              <button class="btn btn-secondary" onclick="browseWheelZip()">Browse</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Profile selector -->
-      <div class="card" style="margin-bottom:16px;">
-        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:12px;">XML Profile</div>
-        <select class="input-field" id="profile-combo" style="margin-bottom:8px;" onchange="onProfileChange()">
-          <option value="">Load files first...</option>
-        </select>
-        <div id="profile-info" style="font-size:12px;color:#8b949e;"></div>
-      </div>
-
-      <!-- FFB Template -->
-      <div class="card">
-        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:12px;">FFB INI Template</div>
-        <select class="input-field" id="ffb-combo">
-          <option value="">No FFB template</option>
-        </select>
-        <div style="margin-top:10px;">
-          <label class="checkbox-wrap">
-            <input type="checkbox" id="apply-ffb-check" />
-            <span style="font-size:13px;color:#c9d1d9;">Apply FFB wheel tuning when generating</span>
-          </label>
-        </div>
+      <div id="remap-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;"></div>
+      <div id="remap-empty" style="display:none;padding:40px;text-align:center;color:#8b949e;font-size:13px;">
+        No mapping data yet. Complete the setup wizard or run the full mapping wizard.
       </div>
     </div>
 
-    <!-- GENERATE PAGE -->
-    <div id="page-generate" class="page" style="padding:24px;display:none;">
+    <!-- GENERATE & INSTALL -->
+    <div id="mpanel-generate" class="mpanel" style="padding:24px;display:none;">
       <div style="margin-bottom:20px;">
-        <div class="section-title">Generate &amp; Install</div>
-        <div class="section-sub">Build patched game files and deploy to your Forza install</div>
+        <div style="font-size:17px;font-weight:700;color:#e6edf3;">Generate &amp; Install</div>
+        <div style="font-size:12px;color:#8b949e;margin-top:2px;">Rebuild and reinstall the patched game ZIP</div>
       </div>
-
-      <!-- Config summary -->
       <div class="card" style="margin-bottom:14px;">
-        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:14px;">Configuration Summary</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;" id="gen-summary">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <span class="dot" id="gen-dot-profile"></span>
-            <span style="font-size:13px;color:#c9d1d9;" id="gen-label-profile">Profile: not set</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <span class="dot" id="gen-dot-wheelbase"></span>
-            <span style="font-size:13px;color:#c9d1d9;" id="gen-label-wheelbase">Wheelbase: not set</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <span class="dot" id="gen-dot-files"></span>
-            <span style="font-size:13px;color:#c9d1d9;" id="gen-label-files">Source files: not ready</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <span class="dot" id="gen-dot-install"></span>
-            <span style="font-size:13px;color:#c9d1d9;" id="gen-label-install">Game install: not found</span>
-          </div>
+        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:12px;">Profile</div>
+        <select class="input-field" id="mg-profile-combo" style="margin-bottom:10px;"></select>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-secondary btn-sm" onclick="mgLoadProfiles()">Reload Profiles</button>
+          <button class="btn btn-secondary btn-sm" onclick="mgCreateBackup()">Create Backup</button>
+          <button class="btn btn-secondary btn-sm" onclick="mgOpenBackup()">Open Backup Folder</button>
+          <button class="btn btn-danger btn-sm" onclick="mgRestoreBackup()">Restore Backup</button>
         </div>
       </div>
-
-      <!-- Options -->
       <div class="card" style="margin-bottom:14px;">
-        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:14px;">Output Options</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div>
-            <label class="label">Game Install Folder</label>
-            <div style="display:flex;gap:8px;">
-              <input class="input-field" id="gen-install-folder" type="text" readonly />
-              <button class="btn btn-secondary" onclick="findInstall()">Find</button>
-            </div>
-          </div>
-          <div>
-            <label class="label">Output Folder</label>
-            <div style="display:flex;gap:8px;">
-              <input class="input-field" id="gen-output-folder" type="text" readonly />
-              <button class="btn btn-secondary" onclick="openOutputFolder()">Open</button>
-            </div>
-          </div>
-        </div>
-        <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:14px;">
-          <label class="checkbox-wrap">
-            <input type="checkbox" id="patch-inplace-check" checked />
-            <span style="font-size:13px;color:#c9d1d9;">Patch selected XML in place</span>
-          </label>
-        </div>
-      </div>
-
-      <!-- Actions -->
-      <div class="card" style="margin-bottom:14px;">
-        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:14px;">Actions</div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
-          <button class="btn btn-secondary" onclick="createBackup()">Create Backup</button>
-          <button class="btn btn-secondary" onclick="openBackupFolder()">Open Backup Folder</button>
-          <button class="btn btn-secondary" onclick="restoreBackups()">Restore Backups</button>
-          <div style="width:1px;height:32px;background:#30363d;margin:0 4px;"></div>
-          <button class="btn btn-primary" onclick="generateFiles()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
-            Generate Files
+        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:12px;">Actions</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <button class="btn btn-primary" onclick="mgGenerate()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+            Generate
           </button>
-          <button class="btn btn-secondary" onclick="verifyZips()">Verify Zips</button>
-          <button class="btn btn-green" onclick="installFiles()" id="btn-install">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Install Generated Files
+          <button class="btn btn-green" onclick="mgInstall()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Install
           </button>
-          <div id="gen-status" class="status-badge status-warn">Not generated</div>
+          <button class="btn btn-secondary btn-sm" onclick="mgVerify()">Verify ZIPs</button>
+          <div id="mg-status" class="status-badge badge-warn" style="margin-left:auto;">Not generated</div>
         </div>
       </div>
-
-      <!-- Log -->
       <div class="card">
-        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:12px;">Status Log</div>
-        <div class="log-area" id="log-area"></div>
+        <div style="font-size:12px;font-weight:700;color:#e6edf3;margin-bottom:8px;">Log</div>
+        <div id="mg-log" class="log-area"></div>
       </div>
     </div>
 
-    <!-- SILENCE PAGE -->
-    <div id="page-silence" class="page" style="padding:24px;display:none;">
+    <!-- ADVANCED -->
+    <div id="mpanel-advanced" class="mpanel" style="padding:24px;display:none;">
       <div style="margin-bottom:20px;">
-        <div class="section-title">Silence</div>
-        <div class="section-sub">System-wide controller device visibility management</div>
+        <div style="font-size:17px;font-weight:700;color:#e6edf3;">Advanced</div>
+        <div style="font-size:12px;color:#8b949e;margin-top:2px;">Paths, FFB tuning, device roles</div>
       </div>
-
       <div class="card" style="margin-bottom:14px;">
-        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:12px;">Controller Silence</div>
-        <div style="font-size:13px;color:#8b949e;margin-bottom:16px;line-height:1.7;">
-          Silence hides unwanted controller devices system-wide. Useful if Windows picks up your sim wheel on menus. Hidden devices are re-enabled when you click Stop Silence or close the app.
+        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:12px;">Paths</div>
+        <div style="display:grid;gap:10px;">
+          <div>
+            <label class="label">Media Folder</label>
+            <div style="display:flex;gap:8px;">
+              <input class="input-field" id="adv-media" type="text" />
+              <button class="btn btn-secondary btn-sm" onclick="advBrowseMedia()">Browse</button>
+              <button class="btn btn-secondary btn-sm" onclick="findInstallAdv()">Find</button>
+            </div>
+          </div>
+          <div>
+            <label class="label">Input ZIP</label>
+            <div style="display:flex;gap:8px;">
+              <input class="input-field" id="adv-inputzip" type="text" />
+              <button class="btn btn-secondary btn-sm" onclick="advBrowseInputZip()">Browse</button>
+            </div>
+          </div>
+          <div>
+            <label class="label">Wheel Tune ZIP (FFB)</label>
+            <div style="display:flex;gap:8px;">
+              <input class="input-field" id="adv-wheelzip" type="text" />
+              <button class="btn btn-secondary btn-sm" onclick="advBrowseWheelZip()">Browse</button>
+            </div>
+          </div>
         </div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;">
-          <div id="silence-status-badge" class="status-badge status-warn">Not active</div>
-          <button class="btn btn-secondary" onclick="refreshDevices()">Refresh Devices</button>
-          <button class="btn btn-secondary" onclick="checkSilenceAccess()">Check Access</button>
-          <button class="btn btn-primary" onclick="applySilence()">Apply Silence</button>
-          <button class="btn btn-danger" onclick="stopSilence()">Stop Silence</button>
+      </div>
+      <div class="card" style="margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:12px;">Device Roles</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div><label class="label">Wheelbase *</label><select class="input-field" id="adv-wb" onchange="advRoleChange()"><option value="">—</option></select></div>
+          <div><label class="label">Pedals</label><select class="input-field" id="adv-pedals" onchange="advRoleChange()"><option value="">None</option></select></div>
+          <div><label class="label">Shifter</label><select class="input-field" id="adv-shifter" onchange="advRoleChange()"><option value="">None</option></select></div>
+          <div><label class="label">Handbrake</label><select class="input-field" id="adv-hb" onchange="advRoleChange()"><option value="">None</option></select></div>
         </div>
-        <label class="checkbox-wrap" style="margin-bottom:8px;">
-          <input type="checkbox" id="auto-silence-check" checked />
-          <span style="font-size:13px;color:#c9d1d9;">Auto keep configured role devices visible</span>
+      </div>
+      <div class="card">
+        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:10px;">FFB Wheel Tuning</div>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:10px;">
+          <input type="checkbox" id="adv-ffb-check" style="accent-color:#ff6600;" />
+          <span style="font-size:13px;color:#c9d1d9;">Apply FFB tuning when generating</span>
         </label>
-      </div>
-
-      <div class="card">
-        <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:12px;">Controller Devices</div>
-        <div style="overflow-x:auto;">
-          <table class="grid-table">
-            <thead>
-              <tr>
-                <th style="width:80px;">Visible</th>
-                <th>Device</th>
-                <th>VID/PID</th>
-                <th>Mapped Role</th>
-                <th>Mode</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="silence-tbody">
-              <tr><td colspan="6" style="text-align:center;color:#8b949e;padding:24px;">Load devices first.</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <select class="input-field" id="adv-ffb-combo"><option value="">No FFB template</option></select>
       </div>
     </div>
 
-  </main>
+  </div>
 </div>
 
 <!-- Toast -->
@@ -550,270 +535,423 @@ tailwind.config = {
 // ───────────────────────────────────────────────
 //  State
 // ───────────────────────────────────────────────
-const state = {
-  currentPage: 'dashboard',
+const S = {
+  wizardStep: 1,
   devices: [],
   controllerDevices: [],
-  profiles: [],
-  ffbTemplates: [],
+  selectedWheelbase: '',
+  selectedWheelbaseName: '',
   mediaFolder: '',
   inputZip: '',
   wheelZip: '',
-  installFolder: '',
-  outputFolder: '',
-  wheelbase: '',
-  pedals: '',
-  shifter: '',
-  handbrake: '',
-  selectedProfileEntry: '',
-  selectedFfbEntry: '',
+  profiles: [],
+  ffbTemplates: [],
+  selectedProfile: '',
+  mappedInputs: [],   // [{key, label, inputType, index, deviceVidPid}, ...]
   generatedInputZip: null,
   generatedWheelZip: null,
-  silenceActive: false,
+  setupDone: false,
 };
 
 // ───────────────────────────────────────────────
-//  Bridge layer
+//  Bridge
 // ───────────────────────────────────────────────
 const pending = {};
 let seq = 0;
-
-function call(action, payload = {}) {
+function call(action, payload = {}, timeoutMs = 15000) {
   return new Promise((resolve, reject) => {
     const id = ++seq;
-    pending[id] = { resolve, reject };
-    window.chrome.webview.postMessage(JSON.stringify({ id, action, payload }));
+    const timer = setTimeout(() => {
+      delete pending[id];
+      reject(new Error(`Bridge timeout (${action}) — bridge not responding`));
+    }, timeoutMs);
+    pending[id] = {
+      resolve: v => { clearTimeout(timer); resolve(v); },
+      reject:  e => { clearTimeout(timer); reject(e); },
+    };
+    // Post as object (not JSON string) so WebMessageAsJson on C# side gets a proper JSON object
+    window.chrome.webview.postMessage({ id, action, payload });
   });
 }
-
 window.chrome.webview.addEventListener('message', e => {
+  // e.data may be a string (PostWebMessageAsJson delivers a JSON string) or already parsed
   let msg;
-  try { msg = JSON.parse(e.data); } catch { return; }
-  const { id, ok, data, error, event } = msg;
-
-  if (event) {
-    handleEvent(event, data);
-    return;
+  if (typeof e.data === 'string') {
+    try { msg = JSON.parse(e.data); } catch { return; }
+  } else {
+    msg = e.data;
   }
-
+  if (!msg || typeof msg !== 'object') return;
+  const { id, ok, data, error, event } = msg;
+  if (event) { handlePush(event, data); return; }
   const p = pending[id];
   if (!p) return;
   delete pending[id];
-  if (ok) p.resolve(data);
-  else p.reject(new Error(error || 'Unknown error'));
+  if (ok) p.resolve(data); else p.reject(new Error(error || 'Error'));
 });
 
-function handleEvent(event, data) {
-  if (event === 'log') {
-    appendLog(data);
-  } else if (event === 'wizardDone') {
-    onWizardDone(data);
-  }
+function handlePush(event, data) {
+  if (event === 'log') { appendLog(data); }
+  else if (event === 'wizardDone') { onWizardDone(data); }
 }
 
 // ───────────────────────────────────────────────
-//  Navigation
+//  WIZARD — Step navigation
 // ───────────────────────────────────────────────
-function showPage(page) {
-  state.currentPage = page;
-  document.querySelectorAll('.page').forEach(el => el.style.display = 'none');
-  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-  const pageEl = document.getElementById('page-' + page);
-  const navEl  = document.getElementById('nav-' + page);
-  if (pageEl) pageEl.style.display = 'block';
-  if (navEl)  navEl.classList.add('active');
-
-  if (page === 'dashboard') updateDashboard();
-  if (page === 'generate')  updateGenSummary();
-}
-
-// ───────────────────────────────────────────────
-//  Devices
-// ───────────────────────────────────────────────
-async function refreshDevices() {
-  setStatus('loading', 'Refreshing devices...');
-  try {
-    const result = await call('refreshDevices');
-    state.devices = result.devices || [];
-    state.controllerDevices = result.controllerDevices || [];
-    renderDeviceGrid();
-    populateDeviceCombos();
-    setStatus('ok', `${state.devices.length} devices found`);
-    if (state.currentPage === 'dashboard') updateDashboard();
-    toast('Devices refreshed', 'success');
-  } catch (err) {
-    setStatus('err', 'Error refreshing devices');
-    toast(err.message, 'error');
-  }
-}
-
-function renderDeviceGrid() {
-  const tbody = document.getElementById('devices-tbody');
-  const devs = state.controllerDevices.length ? state.controllerDevices : state.devices;
-  document.getElementById('devices-count-label').textContent = `${devs.length} Device${devs.length !== 1 ? 's' : ''}`;
-  if (!devs.length) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#8b949e;padding:24px;">No devices found.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = devs.map(d => `
-    <tr>
-      <td style="font-weight:500;color:#e6edf3;">${esc(d.name)}</td>
-      <td class="vid-pid">${esc(d.vid)}</td>
-      <td class="vid-pid">${esc(d.pid)}</td>
-      <td class="vid-pid" style="font-size:11px;">${esc(d.xmlValue)}</td>
-      <td><span class="status-badge ${d.isController?'status-ok':'status-warn'}" style="font-size:11px;">${esc(d.className)}</span></td>
-      <td style="font-size:12px;color:#8b949e;">${d.usesWindowsName?'Windows Settings':'Driver'}</td>
-      <td>
-        <button class="btn btn-secondary" style="padding:4px 10px;font-size:12px;" onclick="setDeviceRole('${esc(d.xmlValue)}')">Set Role</button>
-      </td>
-    </tr>`).join('');
-}
-
-function populateDeviceCombos() {
-  const devs = state.controllerDevices.length ? state.controllerDevices : state.devices;
-  const roles = ['wheelbase','pedals','shifter','handbrake'];
-  const ids = ['combo-wheelbase','combo-pedals','combo-shifter','combo-handbrake'];
-  const saved = roles.map(r => state[r]);
-
-  ids.forEach((id, i) => {
-    const combo = document.getElementById(id);
-    const base = i === 0 ? '<option value="">Select device...</option>' : '<option value="">None</option>';
-    combo.innerHTML = base + devs.map(d =>
-      `<option value="${esc(d.xmlValue)}">${esc(d.name)} (${esc(d.xmlValue)})</option>`
-    ).join('');
-    if (saved[i]) combo.value = saved[i];
+function goStep(n) {
+  // Hide all steps
+  [1,2,3,4].forEach(i => {
+    const el = document.getElementById('step-'+i);
+    if (el) el.style.display = 'none';
   });
-}
-
-function setDeviceRole(xmlValue) {
-  const combo = document.getElementById('combo-wheelbase');
-  combo.value = xmlValue;
-  state.wheelbase = xmlValue;
-  showPage('devices');
-  toast('Device set as wheelbase', 'info');
-}
-
-function onRoleChange() {
-  state.wheelbase  = document.getElementById('combo-wheelbase').value;
-  state.pedals     = document.getElementById('combo-pedals').value;
-  state.shifter    = document.getElementById('combo-shifter').value;
-  state.handbrake  = document.getElementById('combo-handbrake').value;
-  updateDashboard();
-  call('setRoles', {
-    wheelbase: state.wheelbase,
-    pedals: state.pedals,
-    shifter: state.shifter,
-    handbrake: state.handbrake
-  }).catch(() => {});
-}
-
-// ───────────────────────────────────────────────
-//  Install detection
-// ───────────────────────────────────────────────
-async function findInstall() {
-  setStatus('loading', 'Searching for Forza install...');
-  try {
-    const result = await call('findInstall');
-    if (result.found) {
-      state.mediaFolder   = result.mediaFolder;
-      state.installFolder = result.installFolder;
-      state.inputZip      = result.inputZip;
-      state.wheelZip      = result.wheelZip;
-      syncPathInputs();
-      setStatus('ok', 'Game install found');
-      toast('Forza install found: ' + result.mediaFolder, 'success');
-      if (state.currentPage === 'dashboard') updateDashboard();
-    } else {
-      setStatus('warn', 'Game install not found');
-      toast('Could not find Forza install. Browse manually.', 'error');
+  // Update dots
+  [1,2,3,4].forEach(i => {
+    const dot = document.getElementById('sdot-'+i);
+    dot.className = 'step-dot ' + (i < n ? 'done' : i === n ? 'active' : 'pending');
+    if (dot.textContent === String(i)) {
+      dot.textContent = i < n ? '✓' : String(i);
     }
+    const line = document.getElementById('sline-'+i);
+    if (line) line.className = 'step-line' + (i < n ? ' done' : '');
+  });
+  // Show current step
+  const el = document.getElementById('step-'+n);
+  if (el) el.style.display = 'block';
+  S.wizardStep = n;
+
+  // Auto-run step logic
+  if (n === 2) step2Scan();
+  if (n === 4) step4Prepare();
+}
+
+// ───────────────────────────────────────────────
+//  STEP 1 — Detect Wheel
+// ───────────────────────────────────────────────
+async function step1Scan() {
+  document.getElementById('s1-scanning').style.display = 'block';
+  document.getElementById('s1-no-devices').style.display = 'none';
+  document.getElementById('s1-device-list').innerHTML = '<div style="color:#8b949e;font-size:13px;padding:10px 0;">Scanning...</div>';
+  document.getElementById('s1-next').disabled = true;
+  try {
+    const r = await call('refreshDevices');
+    S.devices = r.devices || [];
+    S.controllerDevices = r.controllerDevices || [];
+    renderStep1Devices();
   } catch (err) {
-    setStatus('err', 'Error');
     toast(err.message, 'error');
+  } finally {
+    document.getElementById('s1-scanning').style.display = 'none';
   }
 }
 
-function syncPathInputs() {
-  const mf = document.getElementById('media-folder');
-  const iz = document.getElementById('input-zip');
-  const wz = document.getElementById('wheel-zip');
-  const gf = document.getElementById('gen-install-folder');
-  const of = document.getElementById('gen-output-folder');
+function renderStep1Devices(showAll = false) {
+  const ctrlSet = new Set(S.controllerDevices.map(d => d.xmlValue));
+  let devs = showAll ? S.devices : S.controllerDevices;
+  if (!showAll && devs.length === 0) devs = S.devices; // fallback
 
-  if (mf) { mf.value = state.mediaFolder; mf.className = 'input-field ' + (state.mediaFolder ? 'ok' : 'warn'); }
-  if (iz) { iz.value = state.inputZip;    iz.className = 'input-field ' + (state.inputZip ? 'ok' : 'warn'); }
-  if (wz) { wz.value = state.wheelZip;    wz.className = 'input-field'; }
-  if (gf) gf.value = state.installFolder || state.mediaFolder;
-  if (of) of.value = state.outputFolder;
-}
+  const list = document.getElementById('s1-device-list');
+  const hint = document.getElementById('s1-show-all-hint');
 
-function onMediaFolderChange() {
-  state.mediaFolder = document.getElementById('media-folder').value;
-}
-
-async function browseMediaFolder() {
-  try {
-    const r = await call('browseFolder', { title: 'Select Forza media folder' });
-    if (r.path) { state.mediaFolder = r.path; syncPathInputs(); }
-  } catch {}
-}
-
-async function browseInputZip() {
-  try {
-    const r = await call('browseFile', { title: 'Select input mapping ZIP', filter: 'ZIP files|*.zip' });
-    if (r.path) { state.inputZip = r.path; syncPathInputs(); }
-  } catch {}
-}
-
-async function browseWheelZip() {
-  try {
-    const r = await call('browseFile', { title: 'Select wheel tune ZIP', filter: 'ZIP files|*.zip' });
-    if (r.path) { state.wheelZip = r.path; syncPathInputs(); }
-  } catch {}
-}
-
-// ───────────────────────────────────────────────
-//  Profiles
-// ───────────────────────────────────────────────
-async function loadProfiles() {
-  if (!state.inputZip) { toast('Set the input ZIP path first', 'error'); return; }
-  setStatus('loading', 'Loading profiles...');
-  try {
-    const result = await call('loadProfiles', { inputZip: state.inputZip, wheelZip: state.wheelZip });
-    state.profiles = result.profiles || [];
-    state.ffbTemplates = result.ffbTemplates || [];
-
-    const profileCombo = document.getElementById('profile-combo');
-    profileCombo.innerHTML = '<option value="">Select profile...</option>' +
-      state.profiles.map(p => `<option value="${esc(p.entryName)}">${esc(p.displayName)}</option>`).join('');
-
-    const ffbCombo = document.getElementById('ffb-combo');
-    ffbCombo.innerHTML = '<option value="">No FFB template</option>' +
-      state.ffbTemplates.map(t => `<option value="${esc(t.entryName)}">${esc(t.displayName)}</option>`).join('');
-
-    setStatus('ok', `${state.profiles.length} profiles, ${state.ffbTemplates.length} FFB templates`);
-    toast(`Loaded ${state.profiles.length} profiles`, 'success');
-  } catch (err) {
-    setStatus('err', 'Load failed');
-    toast(err.message, 'error');
-  }
-}
-
-function onProfileChange() {
-  state.selectedProfileEntry = document.getElementById('profile-combo').value;
-  call('selectProfile', { entryName: state.selectedProfileEntry }).catch(() => {});
-  updateGenSummary();
-}
-
-// ───────────────────────────────────────────────
-//  Map Wheel wizard
-// ───────────────────────────────────────────────
-async function launchWizard() {
-  if (!state.wheelbase) {
-    document.getElementById('wizard-prereq-warn').style.display = 'block';
+  if (!devs.length) {
+    list.innerHTML = '';
+    document.getElementById('s1-no-devices').style.display = 'block';
+    hint.style.display = 'none';
     return;
   }
-  document.getElementById('wizard-prereq-warn').style.display = 'none';
+  document.getElementById('s1-no-devices').style.display = 'none';
+  // Show hint if we have controller devices but user might not see their wheel
+  hint.style.display = (!showAll && S.devices.length > devs.length) ? 'block' : 'none';
+
+  list.innerHTML = devs.map(d => {
+    const isKnown = ctrlSet.has(d.xmlValue);
+    return `
+    <div class="device-card ${S.selectedWheelbase === d.xmlValue ? 'selected' : ''}" onclick="selectWheel('${esc(d.xmlValue)}','${esc(d.name)}')">
+      <div class="radio"></div>
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:7px;">
+          <span style="font-size:13px;font-weight:600;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(d.name)}</span>
+          ${isKnown ? '<span class="status-badge badge-blue" style="font-size:10px;flex-shrink:0;">sim hardware</span>' : ''}
+        </div>
+        <div class="vid-pid" style="margin-top:2px;">${esc(d.xmlValue)}</div>
+      </div>
+    </div>`;
+  }).join('');
+  // Auto-select if only one
+  if (devs.length === 1 && !S.selectedWheelbase) {
+    selectWheel(devs[0].xmlValue, devs[0].name);
+  }
+}
+
+function step1ShowAll() {
+  renderStep1Devices(true);
+  document.getElementById('s1-show-all-hint').style.display = 'none';
+}
+
+function selectWheel(xmlValue, name) {
+  S.selectedWheelbase = xmlValue;
+  S.selectedWheelbaseName = name;
+  call('setRoles', { wheelbase: xmlValue, pedals: '', shifter: '', handbrake: '' }).catch(() => {});
+  renderStep1Devices();
+  document.getElementById('s1-next').disabled = false;
+}
+
+// ───────────────────────────────────────────────
+//  STEP 2 — Find Game
+// ───────────────────────────────────────────────
+async function step2Scan() {
+  document.getElementById('s2-scanning').style.display = 'block';
+  document.getElementById('s2-found-box').style.display = 'none';
+  document.getElementById('s2-notfound-box').style.display = 'none';
+  document.getElementById('s2-next').disabled = true;
+  try {
+    const r = await call('findInstall');
+    if (r.found) {
+      S.mediaFolder = r.mediaFolder;
+      S.inputZip    = r.inputZip;
+      S.wheelZip    = r.wheelZip;
+      document.getElementById('s2-path').value = r.mediaFolder;
+      document.getElementById('s2-path').className = 'input-field ok';
+      document.getElementById('s2-found-path').textContent = r.mediaFolder;
+      document.getElementById('s2-found-box').style.display = 'block';
+      document.getElementById('s2-next').disabled = false;
+    } else {
+      document.getElementById('s2-notfound-box').style.display = 'block';
+    }
+  } catch { document.getElementById('s2-notfound-box').style.display = 'block'; }
+  finally { document.getElementById('s2-scanning').style.display = 'none'; }
+}
+
+async function step2Browse() {
+  const r = await call('browseFolder', { title: 'Select Forza media folder' });
+  if (r.path) {
+    S.mediaFolder = r.path;
+    S.inputZip = r.path + '\\inputmappingprofiles.zip';
+    S.wheelZip = r.path + '\\wheeltunablesettingspc.zip';
+    document.getElementById('s2-path').value = r.path;
+    document.getElementById('s2-path').className = 'input-field ok';
+    document.getElementById('s2-found-path').textContent = r.path;
+    document.getElementById('s2-found-box').style.display = 'block';
+    document.getElementById('s2-notfound-box').style.display = 'none';
+    document.getElementById('s2-next').disabled = false;
+  }
+}
+
+document.getElementById('s2-path').addEventListener('input', function() {
+  if (this.value) {
+    S.mediaFolder = this.value;
+    document.getElementById('s2-next').disabled = false;
+  }
+});
+
+// ───────────────────────────────────────────────
+//  STEP 3 — Map Controls
+// ───────────────────────────────────────────────
+async function step3Launch() {
+  try {
+    document.getElementById('s3-launch-btn').disabled = true;
+    await call('launchWizard');
+  } catch (err) {
+    toast(err.message, 'error');
+    document.getElementById('s3-launch-btn').disabled = false;
+  }
+}
+
+function onWizardDone(data) {
+  document.getElementById('s3-launch-btn').disabled = false;
+  if (data && data.success) {
+    S.mappedInputs = data.inputs || [];
+    document.getElementById('s3-result').style.display = 'block';
+    document.getElementById('s3-result-text').textContent = data.summary || '';
+    document.getElementById('s3-next').style.display = 'inline-flex';
+    appendLog('Wizard complete: ' + (data.summary || ''));
+    toast('Mapping complete!', 'success');
+  }
+}
+
+// ───────────────────────────────────────────────
+//  STEP 4 — Generate & Install
+// ───────────────────────────────────────────────
+async function step4Prepare() {
+  // Show summary
+  document.getElementById('s4-wheel-name').textContent = S.selectedWheelbaseName || S.selectedWheelbase || '—';
+  document.getElementById('s4-wheel-vid').textContent = S.selectedWheelbase || '—';
+  document.getElementById('s4-install-path').textContent = S.mediaFolder || '—';
+
+  // Load profiles
+  if (S.inputZip) {
+    try {
+      const r = await call('loadProfiles', { inputZip: S.inputZip, wheelZip: S.wheelZip });
+      S.profiles = r.profiles || [];
+      const combo = document.getElementById('s4-profile-combo');
+      combo.innerHTML = S.profiles.map(p => `<option value="${esc(p.entryName)}">${esc(p.displayName)}</option>`).join('');
+      if (S.profiles.length > 0) {
+        S.selectedProfile = S.profiles[0].entryName;
+        call('selectProfile', { entryName: S.selectedProfile }).catch(() => {});
+      }
+    } catch {}
+  }
+
+  document.getElementById('s4-log').style.display = 'block';
+}
+
+document.getElementById('s4-profile-combo').addEventListener('change', function() {
+  S.selectedProfile = this.value;
+  call('selectProfile', { entryName: S.selectedProfile }).catch(() => {});
+});
+
+function setCheck(id, state) {
+  const el = document.getElementById(id);
+  el.className = 'step-check ' + state;
+  const icons = { running: '⟳', done: '✓', error: '✗', '': '○' };
+  el.querySelector('.chk-icon').textContent = icons[state] || '○';
+}
+
+async function step4Run() {
+  const btn = document.getElementById('s4-go-btn');
+  btn.disabled = true;
+
+  setCheck('chk-backup',   '');
+  setCheck('chk-generate', '');
+  setCheck('chk-install',  '');
+
+  try {
+    // 1. Backup
+    setCheck('chk-backup', 'running');
+    await call('createBackup', { mediaFolder: S.mediaFolder });
+    setCheck('chk-backup', 'done');
+
+    // 2. Generate
+    setCheck('chk-generate', 'running');
+    S.selectedProfile = S.selectedProfile || document.getElementById('s4-profile-combo').value;
+    const gen = await call('generateFiles', {
+      inputZip: S.inputZip,
+      wheelZip: S.wheelZip,
+      profileEntry: S.selectedProfile,
+      wheelbase: S.selectedWheelbase,
+      patchInPlace: true,
+      applyFfb: false,
+    });
+    S.generatedInputZip = gen.generatedInputZip;
+    S.generatedWheelZip = gen.generatedWheelZip;
+    setCheck('chk-generate', 'done');
+
+    // 3. Install
+    setCheck('chk-install', 'running');
+    await call('installFiles', {
+      mediaFolder: S.mediaFolder,
+      generatedInputZip: S.generatedInputZip,
+      generatedWheelZip: S.generatedWheelZip || '',
+    });
+    setCheck('chk-install', 'done');
+
+    document.getElementById('s4-success').style.display = 'block';
+    document.getElementById('s4-done-btn').style.display = 'inline-flex';
+    btn.style.display = 'none';
+    toast('All done — profile installed!', 'success');
+  } catch (err) {
+    ['chk-backup','chk-generate','chk-install'].forEach(id => {
+      if (document.getElementById(id).classList.contains('running')) setCheck(id, 'error');
+    });
+    toast(err.message, 'error');
+    btn.disabled = false;
+  }
+}
+
+function finishSetup() {
+  S.setupDone = true;
+  showMainView();
+}
+
+function skipToMain() { S.setupDone = true; showMainView(); }
+
+// ───────────────────────────────────────────────
+//  MAIN VIEW
+// ───────────────────────────────────────────────
+function showMainView() {
+  document.getElementById('wizard-view').style.display = 'none';
+  const mv = document.getElementById('main-view');
+  mv.style.display = 'flex';
+  updateOverview();
+  buildRemapGrid();
+  populateMainCombos();
+}
+
+function showMain(page) {
+  document.querySelectorAll('.mpanel').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  const panel = document.getElementById('mpanel-'+page);
+  const nav   = document.getElementById('mnav-'+page);
+  if (panel) panel.style.display = 'block';
+  if (nav)   nav.classList.add('active');
+}
+
+function rerunSetup() {
+  document.getElementById('main-view').style.display = 'none';
+  document.getElementById('wizard-view').style.display = 'flex';
+  goStep(1);
+  step1Scan();
+}
+
+// ── Overview ──
+function updateOverview() {
+  document.getElementById('ov-wheel-name').textContent = S.selectedWheelbaseName || S.selectedWheelbase || '—';
+  document.getElementById('ov-wheel-vid').textContent  = S.selectedWheelbase || '—';
+  document.getElementById('ov-install').textContent    = S.mediaFolder || '—';
+  document.getElementById('ov-inputs-count').textContent = S.mappedInputs.length || '—';
+}
+
+// ── Quick Remap ──
+const CONTROL_LABELS = {
+  STEER:'Steering',GAS:'Throttle',BRAKE:'Brake',CLUTCH:'Clutch',
+  SHIFT_UP:'Shift Up',SHIFT_DOWN:'Shift Down',HANDBRAKE:'Handbrake',HORN:'Horn',
+  CONFIRM:'Confirm (A)',CANCEL:'Cancel (B)',PAUSE:'Pause',BACK:'Back',
+  BTN_X:'X Button',BTN_Y:'Y Button',
+  NAV_UP:'D-Pad Up',NAV_DOWN:'D-Pad Down',NAV_LEFT:'D-Pad Left',NAV_RIGHT:'D-Pad Right',
+  REWIND:'Rewind',CAMERA:'Camera',ANNA:'Anna AI',RADIO:'Radio Next',
+  PHOTO:'Photo Mode',QUICKCHAT:'Quickchat',TELEMETRY:'Telemetry',MAP:'Open Map',
+};
+const CONTROL_ORDER = Object.keys(CONTROL_LABELS);
+
+function buildRemapGrid() {
+  const grid = document.getElementById('remap-grid');
+  const empty = document.getElementById('remap-empty');
+  const inputMap = {};
+  S.mappedInputs.forEach(m => { inputMap[m.key] = m; });
+
+  const allKeys = [...new Set([...CONTROL_ORDER, ...Object.keys(inputMap)])];
+  if (allKeys.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  grid.innerHTML = allKeys.map(key => {
+    const mapped = inputMap[key];
+    const label  = CONTROL_LABELS[key] || key;
+    const bindingText = mapped
+      ? `${mapped.inputType} #${mapped.index}${mapped.invertAxis ? ' (inv)' : ''}`
+      : '— not mapped —';
+    const bindingColor = mapped ? '#c9d1d9' : '#484f58';
+    return `
+      <div class="remap-cell" id="remap-${key}" onclick="remapSingle('${esc(key)}')">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8b949e;margin-bottom:4px;">${esc(label)}</div>
+        <div style="font-size:12px;color:${bindingColor};font-family:Consolas,monospace;" id="rbind-${key}">${esc(bindingText)}</div>
+        ${mapped ? `<div class="vid-pid remap-btn" style="margin-top:4px;font-size:10px;" id="rvid-${key}">${esc(mapped.deviceVidPid||'')}</div>` : ''}
+        <div class="remap-btn" style="position:absolute;top:8px;right:8px;font-size:10px;color:#58a6ff;font-weight:600;">Remap</div>
+      </div>`;
+  }).join('');
+}
+
+async function remapSingle(key) {
+  // For now, launch full wizard — single-input capture would need bridge support
+  const label = CONTROL_LABELS[key] || key;
+  const confirmed = await confirmDialog(`Remap "${label}"?\n\nThis will launch the full mapping wizard. You can press Skip on all steps except the one you want to remap.`);
+  if (!confirmed) return;
+  remapAll();
+}
+
+async function remapAll() {
   try {
     await call('launchWizard');
   } catch (err) {
@@ -821,201 +959,115 @@ async function launchWizard() {
   }
 }
 
-function onWizardDone(data) {
-  const el = document.getElementById('wizard-result');
-  if (data && data.success) {
-    el.innerHTML = `<span class="status-badge status-ok">Mapping complete</span><div style="margin-top:8px;font-size:12px;color:#8b949e;">${esc(data.summary || '')}</div>`;
-    toast('Wheel mapped successfully', 'success');
-  } else {
-    el.innerHTML = `<span class="status-badge status-warn">Mapping cancelled or failed</span>`;
-  }
-}
-
-// ───────────────────────────────────────────────
-//  Generate & Install
-// ───────────────────────────────────────────────
-function updateGenSummary() {
-  const dots = {
-    profile:  { ok: !!state.selectedProfileEntry, id: 'gen-dot-profile',   label: 'gen-label-profile',   okTxt: 'Profile: set', failTxt: 'Profile: not set' },
-    wheelbase:{ ok: !!state.wheelbase,             id: 'gen-dot-wheelbase', label: 'gen-label-wheelbase', okTxt: 'Wheelbase: set', failTxt: 'Wheelbase: not set' },
-    files:    { ok: !!state.inputZip,              id: 'gen-dot-files',     label: 'gen-label-files',     okTxt: 'Source files: ready', failTxt: 'Source files: not ready' },
-    install:  { ok: !!(state.installFolder||state.mediaFolder), id: 'gen-dot-install', label: 'gen-label-install', okTxt: 'Game install: found', failTxt: 'Game install: not found' },
-  };
-  for (const key of Object.keys(dots)) {
-    const d = dots[key];
-    const dot = document.getElementById(d.id);
-    const lbl = document.getElementById(d.label);
-    if (!dot || !lbl) continue;
-    dot.className = 'dot ' + (d.ok ? 'dot-green' : 'dot-orange');
-    lbl.textContent = d.ok ? d.okTxt : d.failTxt;
-  }
-  syncPathInputs();
-}
-
-async function generateFiles() {
-  setStatus('loading', 'Generating files...');
+// ── Generate & Install (main view) ──
+async function mgLoadProfiles() {
   try {
-    const result = await call('generateFiles', {
-      mediaFolder:       state.mediaFolder,
-      inputZip:          state.inputZip,
-      wheelZip:          state.wheelZip,
-      profileEntry:      state.selectedProfileEntry,
-      ffbEntry:          document.getElementById('ffb-combo')?.value || '',
-      wheelbase:         state.wheelbase,
-      pedals:            state.pedals,
-      shifter:           state.shifter,
-      handbrake:         state.handbrake,
-      patchInPlace:      document.getElementById('patch-inplace-check')?.checked,
-      applyFfb:          document.getElementById('apply-ffb-check')?.checked,
+    const r = await call('loadProfiles', { inputZip: S.inputZip, wheelZip: S.wheelZip });
+    S.profiles = r.profiles || [];
+    S.ffbTemplates = r.ffbTemplates || [];
+    const combo = document.getElementById('mg-profile-combo');
+    combo.innerHTML = S.profiles.map(p => `<option value="${esc(p.entryName)}">${esc(p.displayName)}</option>`).join('');
+    const advFfb = document.getElementById('adv-ffb-combo');
+    advFfb.innerHTML = '<option value="">No FFB template</option>' +
+      S.ffbTemplates.map(t => `<option value="${esc(t.entryName)}">${esc(t.displayName)}</option>`).join('');
+    toast('Profiles loaded', 'success');
+  } catch (err) { toast(err.message, 'error'); }
+}
+
+async function mgGenerate() {
+  try {
+    const r = await call('generateFiles', {
+      inputZip: S.inputZip, wheelZip: S.wheelZip,
+      profileEntry: document.getElementById('mg-profile-combo').value,
+      wheelbase: S.selectedWheelbase, patchInPlace: true,
+      applyFfb: document.getElementById('adv-ffb-check')?.checked,
+      ffbEntry: document.getElementById('adv-ffb-combo')?.value || '',
     });
-    state.generatedInputZip = result.generatedInputZip;
-    state.generatedWheelZip = result.generatedWheelZip;
-    state.outputFolder = result.outputFolder || state.outputFolder;
-    syncPathInputs();
-    const genStatus = document.getElementById('gen-status');
-    genStatus.textContent = 'Generated';
-    genStatus.className = 'status-badge status-ok';
-    setStatus('ok', 'Files generated');
-    toast('Files generated successfully', 'success');
-  } catch (err) {
-    setStatus('err', 'Generate failed');
-    toast(err.message, 'error');
-  }
+    S.generatedInputZip = r.generatedInputZip;
+    S.generatedWheelZip = r.generatedWheelZip;
+    const s = document.getElementById('mg-status');
+    s.textContent = 'Generated'; s.className = 'status-badge badge-ok';
+    toast('Files generated', 'success');
+  } catch (err) { toast(err.message, 'error'); }
 }
 
-async function installFiles() {
-  setStatus('loading', 'Installing...');
+async function mgInstall() {
   try {
-    await call('installFiles', {
-      mediaFolder: state.installFolder || state.mediaFolder,
-      generatedInputZip: state.generatedInputZip,
-      generatedWheelZip: state.generatedWheelZip,
-    });
-    setStatus('ok', 'Installed');
-    toast('Files installed successfully', 'success');
-  } catch (err) {
-    setStatus('err', 'Install failed');
-    toast(err.message, 'error');
-  }
+    await call('installFiles', { mediaFolder: S.mediaFolder, generatedInputZip: S.generatedInputZip, generatedWheelZip: S.generatedWheelZip || '' });
+    toast('Installed!', 'success');
+  } catch (err) { toast(err.message, 'error'); }
 }
 
-async function createBackup()      { await guardedCall('createBackup',  { mediaFolder: state.mediaFolder }); }
-async function openBackupFolder()  { await guardedCall('openBackupFolder', {}); }
-async function restoreBackups()    { await guardedCall('restoreBackups', { mediaFolder: state.mediaFolder }); }
-async function verifyZips()        { await guardedCall('verifyZips', { generatedInputZip: state.generatedInputZip, generatedWheelZip: state.generatedWheelZip }); }
-async function openOutputFolder()  { await guardedCall('openOutputFolder', {}); }
-async function checkSilenceAccess(){ await guardedCall('checkSilenceAccess', {}); }
-async function applySilence()      { await guardedCall('applySilence', {}); }
-async function stopSilence()       { await guardedCall('stopSilence', {}); }
+async function mgCreateBackup() { try { await call('createBackup', { mediaFolder: S.mediaFolder }); toast('Backup created', 'success'); } catch (err) { toast(err.message, 'error'); } }
+async function mgOpenBackup()   { try { await call('openBackupFolder'); } catch {} }
+async function mgRestoreBackup(){ try { await call('restoreBackups', { mediaFolder: S.mediaFolder }); toast('Backups restored', 'success'); } catch (err) { toast(err.message, 'error'); } }
+async function mgVerify()       { try { await call('verifyZips', { generatedInputZip: S.generatedInputZip, generatedWheelZip: S.generatedWheelZip }); toast('ZIPs verified', 'success'); } catch (err) { toast(err.message, 'error'); } }
 
-async function guardedCall(action, payload) {
-  try {
-    await call(action, payload);
-  } catch (err) {
-    toast(err.message, 'error');
-  }
-}
-
-// ───────────────────────────────────────────────
-//  Dashboard
-// ───────────────────────────────────────────────
-function updateDashboard() {
-  const devCount = document.getElementById('dash-devices-count');
-  const devSub   = document.getElementById('dash-devices-sub');
-  if (devCount) { devCount.textContent = state.devices.length || '—'; }
-  if (devSub)   { devSub.textContent = state.controllerDevices.length + ' controller devices'; }
-
-  const wheelName = document.getElementById('dash-wheel-name');
-  const wheelVid  = document.getElementById('dash-wheel-vid');
-  if (state.wheelbase) {
-    const dev = state.controllerDevices.find(d => d.xmlValue === state.wheelbase) || state.devices.find(d => d.xmlValue === state.wheelbase);
-    if (wheelName) wheelName.textContent = dev ? dev.name : state.wheelbase;
-    if (wheelVid)  wheelVid.textContent = state.wheelbase;
-  } else {
-    if (wheelName) wheelName.textContent = '—';
-    if (wheelVid)  wheelVid.textContent = 'Not assigned';
-  }
-
-  const installStatus = document.getElementById('dash-install-status');
-  const installPath   = document.getElementById('dash-install-path');
-  if (state.mediaFolder) {
-    if (installStatus) { installStatus.textContent = 'Detected'; installStatus.className = 'status-badge status-ok'; }
-    if (installPath)  installPath.textContent = state.mediaFolder;
-  } else {
-    if (installStatus) { installStatus.textContent = 'Not detected'; installStatus.className = 'status-badge status-warn'; }
-    if (installPath)  installPath.textContent = '';
-  }
-
-  const roles = ['wheelbase','pedals','shifter','handbrake'];
-  roles.forEach(r => {
-    const el = document.getElementById('role-' + r);
-    if (el) el.textContent = state[r] || (r === 'wheelbase' ? 'Not assigned' : 'Optional');
+// ── Advanced ──
+function populateMainCombos() {
+  const devs = S.controllerDevices.length ? S.controllerDevices : S.devices;
+  ['adv-wb','adv-pedals','adv-shifter','adv-hb'].forEach(id => {
+    const combo = document.getElementById(id);
+    const base = id === 'adv-wb' ? '<option value="">—</option>' : '<option value="">None</option>';
+    combo.innerHTML = base + devs.map(d => `<option value="${esc(d.xmlValue)}">${esc(d.name)}</option>`).join('');
   });
+  document.getElementById('adv-wb').value = S.selectedWheelbase;
+  document.getElementById('adv-media').value = S.mediaFolder;
+  document.getElementById('adv-inputzip').value = S.inputZip;
+  document.getElementById('adv-wheelzip').value = S.wheelZip;
+}
+
+async function advBrowseMedia()    { const r = await call('browseFolder', {}); if (r.path) { S.mediaFolder = r.path; document.getElementById('adv-media').value = r.path; } }
+async function advBrowseInputZip() { const r = await call('browseFile', { filter: 'ZIP files|*.zip' }); if (r.path) { S.inputZip = r.path; document.getElementById('adv-inputzip').value = r.path; } }
+async function advBrowseWheelZip() { const r = await call('browseFile', { filter: 'ZIP files|*.zip' }); if (r.path) { S.wheelZip = r.path; document.getElementById('adv-wheelzip').value = r.path; } }
+async function findInstallAdv()    { const r = await call('findInstall'); if (r.found) { S.mediaFolder = r.mediaFolder; S.inputZip = r.inputZip; S.wheelZip = r.wheelZip; document.getElementById('adv-media').value = r.mediaFolder; } }
+
+function advRoleChange() {
+  S.selectedWheelbase     = document.getElementById('adv-wb').value;
+  call('setRoles', { wheelbase: S.selectedWheelbase, pedals: document.getElementById('adv-pedals').value, shifter: document.getElementById('adv-shifter').value, handbrake: document.getElementById('adv-hb').value }).catch(() => {});
 }
 
 // ───────────────────────────────────────────────
 //  Logging
 // ───────────────────────────────────────────────
 function appendLog(msg) {
-  const el = document.getElementById('log-area');
-  if (!el) return;
   const ts = new Date().toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  el.textContent += `[${ts}] ${msg}\n`;
-  el.scrollTop = el.scrollHeight;
+  const line = `[${ts}] ${msg}\n`;
+  for (const id of ['s4-log','mg-log']) {
+    const el = document.getElementById(id);
+    if (el) { el.textContent += line; el.scrollTop = el.scrollHeight; }
+  }
 }
 
 // ───────────────────────────────────────────────
-//  Status bar
-// ───────────────────────────────────────────────
-function setStatus(kind, text) {
-  const dot  = document.getElementById('status-dot');
-  const txt  = document.getElementById('status-text');
-  if (!dot || !txt) return;
-  const map = { ok: 'dot-green', warn: 'dot-orange', err: 'dot-red', loading: 'dot-orange' };
-  dot.className = 'dot ' + (map[kind] || 'dot-gray');
-  txt.textContent = text;
-}
-
-// ───────────────────────────────────────────────
-//  Toast
+//  Toast & utils
 // ───────────────────────────────────────────────
 let toastTimer;
-function toast(msg, kind = 'info') {
+function toast(msg, kind='info') {
   const el = document.getElementById('toast');
-  if (!el) return;
   clearTimeout(toastTimer);
   el.textContent = msg;
   el.className = `toast ${kind} show`;
-  toastTimer = setTimeout(() => { el.classList.remove('show'); }, 3500);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
 }
 
-// ───────────────────────────────────────────────
-//  Utils
-// ───────────────────────────────────────────────
-function esc(str) {
-  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function confirmDialog(msg) {
+  return new Promise(resolve => resolve(window.confirm(msg)));
 }
 
 // ───────────────────────────────────────────────
 //  Boot
 // ───────────────────────────────────────────────
-(async () => {
-  setStatus('loading', 'Initializing...');
-  try {
-    const state0 = await call('getInitialState');
-    state.outputFolder  = state0.outputFolder  || '';
-    state.mediaFolder   = state0.mediaFolder   || '';
-    state.installFolder = state0.installFolder || '';
-    state.inputZip      = state0.inputZip      || '';
-    state.wheelZip      = state0.wheelZip      || '';
-    syncPathInputs();
-    setStatus('ok', 'Ready');
-  } catch {
-    setStatus('warn', 'Bridge not available');
-  }
-  await refreshDevices();
-  updateDashboard();
-})();
+document.getElementById('wizard-view').style.display = 'flex';
+document.getElementById('wizard-view').style.flexDirection = 'column';
+
+// Init step 1 dot active
+document.getElementById('sdot-1').className = 'step-dot active';
+
+// Start scanning on load
+step1Scan();
 </script>
 </body>
 </html>
