@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
 using System.Xml.Linq;
+using Windows.Gaming.Input;
 
 namespace HorizonSimTool;
 
@@ -35,6 +36,7 @@ internal sealed class MainForm : Form
 
     private readonly CheckBox _patchInPlaceCheck = new();
     private readonly CheckBox _useBackupSourcesCheck = new();
+    private readonly CheckBox _applyWheelTuningCheck = new();
     private readonly CheckBox _setFfbInvertCheck = new();
     private readonly CheckBox _ffbInvertValueCheck = new();
 
@@ -82,7 +84,7 @@ internal sealed class MainForm : Form
         StartPosition = FormStartPosition.CenterScreen;
         AutoScaleMode = AutoScaleMode.Dpi;
         Font = new Font("Segoe UI", 9F);
-        BackColor = Color.FromArgb(246, 248, 251);
+        BackColor = Color.FromArgb(13, 17, 23);
         var appIcon = TryLoadApplicationIcon();
         if (appIcon is not null)
         {
@@ -184,19 +186,29 @@ internal sealed class MainForm : Form
         _statusLabel.AutoSize = true;
         _statusLabel.MinimumSize = new Size(0, 30);
         _statusLabel.TextAlign = ContentAlignment.MiddleLeft;
-        _statusLabel.ForeColor = Color.FromArgb(52, 73, 94);
+        _statusLabel.ForeColor = Color.FromArgb(139, 148, 158);
         _statusLabel.Text = "Ready";
         root.Controls.Add(_statusLabel, 0, 2);
     }
 
     private Control BuildHeader()
     {
-        var panel = new TableLayoutPanel
+        // Orange accent stripe wrapping the header
+        var wrapper = new Panel
         {
             Dock = DockStyle.Top,
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
-            BackColor = Color.FromArgb(24, 32, 45),
+            BackColor = Color.FromArgb(255, 102, 0),
+            Padding = new Padding(0, 0, 0, 3)
+        };
+
+        var panel = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            BackColor = Color.FromArgb(8, 12, 20),
             Padding = new Padding(18, 10, 18, 10),
             ColumnCount = 1,
             RowCount = 2
@@ -209,35 +221,48 @@ internal sealed class MainForm : Form
             Dock = DockStyle.Top,
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
-            ColumnCount = 1,
+            ColumnCount = 2,
             RowCount = 2
         };
+        titlePanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        titlePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         titlePanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         titlePanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+
+        var accentBar = new Panel
+        {
+            BackColor = Color.FromArgb(255, 102, 0),
+            Width = 4,
+            Dock = DockStyle.Fill,
+            Margin = new Padding(0, 2, 10, 2)
+        };
+        titlePanel.SetRowSpan(accentBar, 2);
 
         var title = new Label
         {
             AutoSize = true,
             Dock = DockStyle.Top,
             Text = "Horizon SimTool",
-            ForeColor = Color.White,
+            ForeColor = Color.FromArgb(240, 246, 252),
             Font = new Font("Segoe UI Semibold", 17F),
-            TextAlign = ContentAlignment.MiddleLeft
+            TextAlign = ContentAlignment.MiddleLeft,
+            Margin = new Padding(0, 0, 0, 2)
         };
 
         var subtitle = new Label
         {
             AutoSize = true,
             Dock = DockStyle.Top,
-            Text = "Create wheel mapping XML/INI fixes, package them correctly, and install them with backups.",
-            ForeColor = Color.FromArgb(196, 207, 222),
+            Text = "Wheel mapping  ·  FFB tuning  ·  Device management  ·  Built for sim racers",
+            ForeColor = Color.FromArgb(100, 116, 139),
             Font = new Font("Segoe UI", 9.5F),
             TextAlign = ContentAlignment.MiddleLeft,
             MaximumSize = new Size(1200, 0)
         };
 
-        titlePanel.Controls.Add(title, 0, 0);
-        titlePanel.Controls.Add(subtitle, 0, 1);
+        titlePanel.Controls.Add(accentBar, 0, 0);
+        titlePanel.Controls.Add(title, 1, 0);
+        titlePanel.Controls.Add(subtitle, 1, 1);
         panel.Controls.Add(titlePanel, 0, 0);
 
         var presetPanel = new FlowLayoutPanel
@@ -256,7 +281,7 @@ internal sealed class MainForm : Form
             AutoSize = true,
             MinimumSize = new Size(48, 30),
             TextAlign = ContentAlignment.MiddleLeft,
-            ForeColor = Color.FromArgb(226, 232, 240),
+            ForeColor = Color.FromArgb(180, 190, 205),
             Margin = new Padding(0, 4, 4, 0)
         });
         _presetCombo.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -271,7 +296,8 @@ internal sealed class MainForm : Form
         presetPanel.Controls.Add(CreateButton("Export", ExportPreset, 82));
         panel.Controls.Add(presetPanel, 0, 1);
 
-        return panel;
+        wrapper.Controls.Add(panel);
+        return wrapper;
     }
 
     private Control BuildGameFilesGroup()
@@ -348,6 +374,7 @@ internal sealed class MainForm : Form
         deviceButtons.Controls.Add(CreateButton("Set pedals", () => UseSelectedDevice(_pedalsDeviceCombo), 96));
         deviceButtons.Controls.Add(CreateButton("Set shifter", () => UseSelectedDevice(_shifterDeviceCombo), 96));
         deviceButtons.Controls.Add(CreateButton("Set handbrake", () => UseSelectedDevice(_handbrakeDeviceCombo), 118));
+        deviceButtons.Controls.Add(CreateAccentButton("Map Wheel...", LaunchWheelMapWizard, 118));
         deviceButtons.Controls.Add(CreateHint("Names prefer Windows Settings labels."));
         devicesLayout.Controls.Add(deviceButtons, 0, 0);
 
@@ -511,8 +538,8 @@ internal sealed class MainForm : Form
         _advancedSettingsGroup.Dock = DockStyle.Top;
         _advancedSettingsGroup.MinimumSize = new Size(0, 420);
         _advancedSettingsGroup.Padding = new Padding(8);
-        _advancedSettingsGroup.BackColor = Color.FromArgb(246, 248, 251);
-        _advancedSettingsGroup.ForeColor = Color.FromArgb(33, 43, 54);
+        _advancedSettingsGroup.BackColor = Color.FromArgb(22, 27, 34);
+        _advancedSettingsGroup.ForeColor = Color.FromArgb(180, 190, 205);
         _advancedSettingsGroup.Visible = false;
         var dInputLayout = new TableLayoutPanel
         {
@@ -621,6 +648,13 @@ internal sealed class MainForm : Form
         actionPanel.Controls.Add(CreateButton("Create backup", CreateBackup, 126));
         actionPanel.Controls.Add(CreateButton("Open backup folder", OpenBackupFolder, 154));
         actionPanel.Controls.Add(CreateButton("Restore backups", RestoreBackups, 136));
+        _applyWheelTuningCheck.Text = "Apply FFB wheel tuning";
+        _applyWheelTuningCheck.AutoSize = true;
+        _applyWheelTuningCheck.Checked = false;
+        _applyWheelTuningCheck.Margin = new Padding(6, 8, 4, 0);
+        _applyWheelTuningCheck.ForeColor = Color.FromArgb(180, 190, 205);
+        _applyWheelTuningCheck.FlatStyle = FlatStyle.Flat;
+        actionPanel.Controls.Add(_applyWheelTuningCheck);
         actionPanel.Controls.Add(CreateButton("Generate files", GenerateFiles, 160));
         actionPanel.Controls.Add(CreateButton("Verify generated zips", VerifyGeneratedZips, 170));
         actionPanel.Controls.Add(CreateButton("Install generated files", InstallGeneratedFiles, 170));
@@ -633,7 +667,8 @@ internal sealed class MainForm : Form
         _logText.Multiline = true;
         _logText.ScrollBars = ScrollBars.Vertical;
         _logText.ReadOnly = true;
-        _logText.BackColor = Color.White;
+        _logText.BackColor = Color.FromArgb(13, 17, 23);
+        _logText.ForeColor = Color.FromArgb(139, 148, 158);
         _logText.BorderStyle = BorderStyle.FixedSingle;
         logGroup.Controls.Add(_logText);
         layout.Controls.Add(logGroup, 0, 2);
@@ -749,6 +784,7 @@ internal sealed class MainForm : Form
         _setFfbInvertCheck.CheckedChanged += (_, _) => _ffbInvertValueCheck.Enabled = _setFfbInvertCheck.Checked;
         _patchInPlaceCheck.CheckedChanged += (_, _) => _newProfileNameText.Enabled = !_patchInPlaceCheck.Checked;
         _useBackupSourcesCheck.CheckedChanged += (_, _) => UpdateZipPathsFromMediaFolder();
+        _applyWheelTuningCheck.CheckedChanged += (_, _) => UpdateConfigurationVisuals();
         _controllerDevicesOnlyCheck.CheckedChanged += (_, _) =>
         {
             RefreshDeviceGrid();
@@ -818,8 +854,8 @@ internal sealed class MainForm : Form
     private static void SetStatusLabel(Label label, string text, bool configured)
     {
         label.Text = text;
-        label.BackColor = configured ? Color.FromArgb(210, 244, 224) : Color.FromArgb(255, 239, 205);
-        label.ForeColor = configured ? Color.FromArgb(17, 97, 52) : Color.FromArgb(126, 82, 0);
+        label.BackColor = configured ? Color.FromArgb(18, 50, 30) : Color.FromArgb(55, 40, 10);
+        label.ForeColor = configured ? Color.FromArgb(63, 185, 80) : Color.FromArgb(230, 167, 0);
     }
 
     private void ConfigureTextInputs()
@@ -878,7 +914,8 @@ internal sealed class MainForm : Form
         textBox.Dock = DockStyle.Fill;
         textBox.ReadOnly = true;
         textBox.BorderStyle = BorderStyle.FixedSingle;
-        textBox.BackColor = Color.White;
+        textBox.BackColor = Color.FromArgb(30, 36, 46);
+        textBox.ForeColor = Color.FromArgb(139, 148, 158);
         textBox.Margin = new Padding(4, 7, 12, 4);
     }
 
@@ -890,8 +927,17 @@ internal sealed class MainForm : Form
         _devicesGrid.AllowUserToDeleteRows = false;
         _devicesGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _devicesGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        _devicesGrid.BackgroundColor = Color.White;
+        _devicesGrid.BackgroundColor = Color.FromArgb(22, 27, 34);
         _devicesGrid.BorderStyle = BorderStyle.FixedSingle;
+        _devicesGrid.GridColor = Color.FromArgb(48, 54, 61);
+        _devicesGrid.DefaultCellStyle.BackColor = Color.FromArgb(22, 27, 34);
+        _devicesGrid.DefaultCellStyle.ForeColor = Color.FromArgb(201, 209, 217);
+        _devicesGrid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 80, 170);
+        _devicesGrid.DefaultCellStyle.SelectionForeColor = Color.FromArgb(240, 246, 252);
+        _devicesGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(13, 17, 23);
+        _devicesGrid.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(139, 148, 158);
+        _devicesGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(13, 17, 23);
+        _devicesGrid.EnableHeadersVisualStyles = false;
         if (_devicesGrid.Columns.Count > 0)
         {
             return;
@@ -915,8 +961,17 @@ internal sealed class MainForm : Form
         _dInputGrid.AllowUserToDeleteRows = false;
         _dInputGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _dInputGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        _dInputGrid.BackgroundColor = Color.White;
+        _dInputGrid.BackgroundColor = Color.FromArgb(22, 27, 34);
         _dInputGrid.BorderStyle = BorderStyle.FixedSingle;
+        _dInputGrid.GridColor = Color.FromArgb(48, 54, 61);
+        _dInputGrid.DefaultCellStyle.BackColor = Color.FromArgb(22, 27, 34);
+        _dInputGrid.DefaultCellStyle.ForeColor = Color.FromArgb(201, 209, 217);
+        _dInputGrid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 80, 170);
+        _dInputGrid.DefaultCellStyle.SelectionForeColor = Color.FromArgb(240, 246, 252);
+        _dInputGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(13, 17, 23);
+        _dInputGrid.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(139, 148, 158);
+        _dInputGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(13, 17, 23);
+        _dInputGrid.EnableHeadersVisualStyles = false;
         _dInputGrid.Columns.Add("Key", "Command");
         _dInputGrid.Columns.Add("Type", "Type");
         _dInputGrid.Columns.Add("Index", "Index");
@@ -943,8 +998,17 @@ internal sealed class MainForm : Form
         _silenceGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _silenceGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         _silenceGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
-        _silenceGrid.BackgroundColor = Color.White;
+        _silenceGrid.BackgroundColor = Color.FromArgb(22, 27, 34);
         _silenceGrid.BorderStyle = BorderStyle.FixedSingle;
+        _silenceGrid.GridColor = Color.FromArgb(48, 54, 61);
+        _silenceGrid.DefaultCellStyle.BackColor = Color.FromArgb(22, 27, 34);
+        _silenceGrid.DefaultCellStyle.ForeColor = Color.FromArgb(201, 209, 217);
+        _silenceGrid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 80, 170);
+        _silenceGrid.DefaultCellStyle.SelectionForeColor = Color.FromArgb(240, 246, 252);
+        _silenceGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(13, 17, 23);
+        _silenceGrid.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(139, 148, 158);
+        _silenceGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(13, 17, 23);
+        _silenceGrid.EnableHeadersVisualStyles = false;
         _silenceGrid.RowHeadersVisible = false;
         _silenceGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
         if (_silenceGrid.Columns.Count > 0)
@@ -990,7 +1054,8 @@ internal sealed class MainForm : Form
     private void UpdateConfigurationVisuals()
     {
         SetStatusLabel(_profileStatusLabel, _profileCombo.SelectedItem is ProfileComboItem ? "Profile set" : "Profile needed", _profileCombo.SelectedItem is ProfileComboItem);
-        var filesReady = File.Exists(_inputZipText.Text) && File.Exists(_wheelZipText.Text);
+        var wheelRequired = _applyWheelTuningCheck.Checked;
+        var filesReady = File.Exists(_inputZipText.Text) && (!wheelRequired || File.Exists(_wheelZipText.Text));
         SetStatusLabel(_zipStatusLabel, filesReady ? "Source files set" : "Files needed", filesReady);
         UpdatePathVisuals();
 
@@ -1026,8 +1091,8 @@ internal sealed class MainForm : Form
 
     private static void SetPathTextBoxState(TextBox textBox, bool configured)
     {
-        textBox.BackColor = configured ? Color.FromArgb(232, 247, 238) : Color.FromArgb(255, 248, 224);
-        textBox.ForeColor = configured ? Color.FromArgb(17, 97, 52) : Color.FromArgb(126, 82, 0);
+        textBox.BackColor = configured ? Color.FromArgb(18, 50, 30) : Color.FromArgb(55, 40, 10);
+        textBox.ForeColor = configured ? Color.FromArgb(63, 185, 80) : Color.FromArgb(230, 167, 0);
     }
 
     private void ConfigureTrayIcon()
@@ -1125,8 +1190,8 @@ internal sealed class MainForm : Form
             : required
                 ? "Not configured"
                 : "Optional";
-        textBox.BackColor = configured ? Color.FromArgb(232, 247, 238) : Color.FromArgb(255, 248, 224);
-        textBox.ForeColor = configured ? Color.FromArgb(17, 97, 52) : Color.FromArgb(126, 82, 0);
+        textBox.BackColor = configured ? Color.FromArgb(18, 50, 30) : Color.FromArgb(55, 40, 10);
+        textBox.ForeColor = configured ? Color.FromArgb(63, 185, 80) : Color.FromArgb(230, 167, 0);
     }
 
     private void HighlightDInputRows()
@@ -1138,10 +1203,10 @@ internal sealed class MainForm : Form
             var configured = !string.IsNullOrWhiteSpace(CellText(row, "DInputIndex"))
                 || !string.IsNullOrWhiteSpace(CellText(row, "DInputInvert"));
             row.DefaultCellStyle.BackColor = invalidVidPid
-                ? Color.FromArgb(255, 235, 230)
+                ? Color.FromArgb(60, 15, 15)
                 : configured
-                    ? Color.FromArgb(232, 244, 255)
-                    : Color.White;
+                    ? Color.FromArgb(15, 35, 65)
+                    : Color.FromArgb(22, 27, 34);
         }
     }
 
@@ -1154,7 +1219,7 @@ internal sealed class MainForm : Form
             var defaultText = CellText(row, "Default");
             var status = CellText(row, "Status");
             row.DefaultCellStyle.BackColor = GetSilenceRowColor(visible, role, defaultText, status);
-            row.DefaultCellStyle.ForeColor = Color.FromArgb(33, 43, 54);
+            row.DefaultCellStyle.ForeColor = Color.FromArgb(201, 209, 217);
         }
     }
 
@@ -1162,24 +1227,24 @@ internal sealed class MainForm : Form
     {
         if (status.Equals("Disabled", StringComparison.OrdinalIgnoreCase))
         {
-            return Color.FromArgb(255, 228, 225);
+            return Color.FromArgb(60, 15, 15);
         }
 
         if (status.Equals("Unknown", StringComparison.OrdinalIgnoreCase))
         {
-            return Color.FromArgb(235, 238, 245);
+            return Color.FromArgb(25, 30, 40);
         }
 
         if (visible)
         {
             return !string.IsNullOrWhiteSpace(role)
-                ? Color.FromArgb(232, 247, 238)
-                : Color.White;
+                ? Color.FromArgb(18, 50, 30)
+                : Color.FromArgb(22, 27, 34);
         }
 
         return defaultText.Contains("controller", StringComparison.OrdinalIgnoreCase)
-            ? Color.FromArgb(255, 239, 205)
-            : Color.FromArgb(255, 235, 230);
+            ? Color.FromArgb(55, 40, 10)
+            : Color.FromArgb(60, 15, 15);
     }
 
     private void RefreshDevices()
@@ -1212,7 +1277,7 @@ internal sealed class MainForm : Form
             _devicesGrid.Rows[rowIndex].Tag = device;
             if (device.UsesWindowsSettingsName)
             {
-                _devicesGrid.Rows[rowIndex].DefaultCellStyle.BackColor = Color.FromArgb(232, 247, 238);
+                _devicesGrid.Rows[rowIndex].DefaultCellStyle.BackColor = Color.FromArgb(18, 50, 30);
             }
         }
     }
@@ -2004,6 +2069,85 @@ internal sealed class MainForm : Form
         target.Text = new DeviceComboItem(device).ToString();
     }
 
+    private void LaunchWheelMapWizard()
+    {
+        // Resolve which device to map — prefer the wheelbase combo, fall back to selected grid row
+        DeviceInfo? device = null;
+
+        var primaryText = _primaryDeviceCombo.Text.Trim();
+        if (!string.IsNullOrWhiteSpace(primaryText))
+        {
+            if (VidPid.TryParse(primaryText, out var vidPid))
+                device = _devices.FirstOrDefault(d => d.VidPid.Compact.Equals(vidPid.Compact, StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (device is null && _devicesGrid.SelectedRows.Count > 0)
+            device = _devicesGrid.SelectedRows[0].Tag as DeviceInfo;
+
+        if (device is null)
+        {
+            MessageBox.Show(
+                "Select a device in the device list first, or set a Wheelbase in the Profile section.",
+                "Map Wheel", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+
+        // Find the matching Windows.Gaming.Input.RawGameController by VID/PID
+        Windows.Gaming.Input.RawGameController? controller = null;
+        foreach (var rc in Windows.Gaming.Input.RawGameController.RawGameControllers)
+        {
+            var vid = rc.HardwareVendorId.ToString("X4");
+            var pid = rc.HardwareProductId.ToString("X4");
+            var check = new VidPid(vid, pid);
+            if (check.Compact.Equals(device.VidPid.Compact, StringComparison.OrdinalIgnoreCase))
+            {
+                controller = rc;
+                break;
+            }
+        }
+
+        if (controller is null)
+        {
+            MessageBox.Show(
+                $"Could not find '{device.Name}' ({device.VidPid.ToXmlString()}) in Windows.Gaming.Input.\n\nMake sure the device is connected and recognised as a game controller.",
+                "Map Wheel", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        using var wizard = new WheelMapWizard(device.VidPid, device.Name, controller);
+        if (wizard.ShowDialog(this) != DialogResult.OK || wizard.Result is null)
+            return;
+
+        var result = wizard.Result;
+        var document = WheelMapWizard.BuildXmlDocument(result);
+        var xml = XmlProfileEditor.ToUtf8Xml(document);
+
+        var outputDir = _outputFolderText.Text.Trim();
+        if (string.IsNullOrWhiteSpace(outputDir))
+            outputDir = DefaultOutputFolder();
+
+        Directory.CreateDirectory(outputDir);
+
+        var fileName = result.ProfileName + ".xml";
+
+        using var saveDialog = new SaveFileDialog
+        {
+            Title = "Save Mapped Profile",
+            Filter = "XML files (*.xml)|*.xml",
+            FileName = fileName,
+            InitialDirectory = outputDir
+        };
+
+        if (saveDialog.ShowDialog(this) != DialogResult.OK)
+            return;
+
+        File.WriteAllBytes(saveDialog.FileName, xml);
+        Log($"Wheel map saved: {saveDialog.FileName}  ({result.Inputs.Count} inputs mapped)");
+        MessageBox.Show(
+            $"Profile saved to:\n{saveDialog.FileName}\n\n{result.Inputs.Count} input(s) mapped.\n\nYou can now use this XML as a custom profile in the Mapping tab.",
+            "Map Wheel — Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
     private void PopulateDInputGrid()
     {
         _dInputGrid.Rows.Clear();
@@ -2087,21 +2231,31 @@ internal sealed class MainForm : Form
             Directory.CreateDirectory(previewFolder);
             var xmlPreviewPath = Path.Combine(previewFolder, Path.GetFileName(destinationProfileName));
 
-            var template = (_ffbTemplateCombo.SelectedItem as TemplateComboItem)?.Template
-                ?? throw new InvalidOperationException("Choose an FFB INI template.");
-            var templateIni = ZipWheelTuneReader.ReadText(sourceWheelZip, template.EntryName);
-            var patchedIni = IniEditor.SetVendorProduct(templateIni, primary);
-            var destinationIniName = $"ControllerFFB-0X{primary.Compact}.ini";
-            var iniPreviewPath = Path.Combine(previewFolder, destinationIniName);
-
             _generatedInputZip = Path.Combine(outputFolder, InputZipName);
-            _generatedWheelZip = Path.Combine(outputFolder, WheelZipName);
-            if (PathsEqual(sourceInputZip, _generatedInputZip) || PathsEqual(sourceWheelZip, _generatedWheelZip))
-            {
+            _generatedWheelZip = _applyWheelTuningCheck.Checked ? Path.Combine(outputFolder, WheelZipName) : null;
+
+            if (PathsEqual(sourceInputZip, _generatedInputZip))
                 throw new InvalidOperationException("The generated output folder would overwrite the selected source zips. Choose game source zips outside the Horizon SimTool output folder.");
+            if (_generatedWheelZip != null && PathsEqual(sourceWheelZip, _generatedWheelZip))
+                throw new InvalidOperationException("The generated output folder would overwrite the selected source zips. Choose game source zips outside the Horizon SimTool output folder.");
+
+            string? patchedIni = null;
+            string? templateEntryName = null;
+            string? destinationIniName = null;
+            string? iniPreviewPath = null;
+
+            if (_applyWheelTuningCheck.Checked)
+            {
+                var template = (_ffbTemplateCombo.SelectedItem as TemplateComboItem)?.Template
+                    ?? throw new InvalidOperationException("Choose an FFB INI template.");
+                var templateIni = ZipWheelTuneReader.ReadText(sourceWheelZip, template.EntryName);
+                patchedIni = IniEditor.SetVendorProduct(templateIni, primary);
+                templateEntryName = template.EntryName;
+                destinationIniName = $"ControllerFFB-0X{primary.Compact}.ini";
+                iniPreviewPath = Path.Combine(previewFolder, destinationIniName);
             }
 
-            if (!ConfirmOverwriteGeneratedFiles(xmlPreviewPath, iniPreviewPath, _generatedInputZip, _generatedWheelZip))
+            if (!ConfirmOverwriteGeneratedFiles(new[] { xmlPreviewPath, iniPreviewPath, _generatedInputZip, _generatedWheelZip }.Where(p => p != null).Select(p => p!).ToArray()))
             {
                 _generatedInputZip = null;
                 _generatedWheelZip = null;
@@ -2111,15 +2265,19 @@ internal sealed class MainForm : Form
             }
 
             File.WriteAllBytes(xmlPreviewPath, patchedXml);
-            File.WriteAllText(iniPreviewPath, patchedIni, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
             ZipWriter.WriteInputMappingZip(sourceInputZip, _generatedInputZip, selectedProfile.EntryName, destinationProfileName, patchedXml);
-            ZipWriter.WriteWheelTuneZip(sourceWheelZip, _generatedWheelZip, template.EntryName, destinationIniName, patchedIni, Encoding.UTF8);
+
+            if (_applyWheelTuningCheck.Checked && patchedIni != null && destinationIniName != null && iniPreviewPath != null && _generatedWheelZip != null)
+            {
+                File.WriteAllText(iniPreviewPath, patchedIni, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+                ZipWriter.WriteWheelTuneZip(sourceWheelZip, _generatedWheelZip, templateEntryName!, destinationIniName, patchedIni, Encoding.UTF8);
+                Log("Generated INI preview: " + iniPreviewPath);
+            }
 
             VerifyGeneratedZipsCore();
 
             SetStatusLabel(_generatedStatusLabel, "Generated", configured: true);
             Log("Generated XML preview: " + xmlPreviewPath);
-            Log("Generated INI preview: " + iniPreviewPath);
             Log("Generated zips in: " + outputFolder);
         });
     }
@@ -2223,30 +2381,34 @@ internal sealed class MainForm : Form
 
     private void VerifyGeneratedZipsCore()
     {
-        if (string.IsNullOrWhiteSpace(_generatedInputZip) || string.IsNullOrWhiteSpace(_generatedWheelZip))
-        {
+        if (string.IsNullOrWhiteSpace(_generatedInputZip))
             throw new InvalidOperationException("Generate files before verifying.");
-        }
 
         var inputResult = ZipVerifier.VerifyStoreOnlyTopLevel(_generatedInputZip);
-        var wheelResult = ZipVerifier.VerifyStoreOnlyTopLevel(_generatedWheelZip);
-        if (!inputResult.Passed || !wheelResult.Passed)
-        {
+        if (!inputResult.Passed)
             throw new InvalidOperationException("One or more generated zip entries are nested or compressed.");
-        }
 
-        SetStatusLabel(_generatedStatusLabel, "Generated + verified", configured: true);
-        Log($"Verified generated zips: {inputResult.EntryCount} input entries, {wheelResult.EntryCount} wheel tune entries, all Store/no compression.");
+        if (!string.IsNullOrWhiteSpace(_generatedWheelZip))
+        {
+            var wheelResult = ZipVerifier.VerifyStoreOnlyTopLevel(_generatedWheelZip);
+            if (!wheelResult.Passed)
+                throw new InvalidOperationException("One or more generated wheel zip entries are nested or compressed.");
+            SetStatusLabel(_generatedStatusLabel, "Generated + verified", configured: true);
+            Log($"Verified generated zips: {inputResult.EntryCount} input entries, {wheelResult.EntryCount} wheel tune entries, all Store/no compression.");
+        }
+        else
+        {
+            SetStatusLabel(_generatedStatusLabel, "Generated + verified", configured: true);
+            Log($"Verified generated input zip: {inputResult.EntryCount} entries, all Store/no compression. (Wheel tuning not applied.)");
+        }
     }
 
     private void InstallGeneratedFiles()
     {
         RunGuarded(() =>
         {
-            if (string.IsNullOrWhiteSpace(_generatedInputZip) || string.IsNullOrWhiteSpace(_generatedWheelZip))
-            {
+            if (string.IsNullOrWhiteSpace(_generatedInputZip))
                 throw new InvalidOperationException("Generate files before installing.");
-            }
 
             ValidateSourcePaths();
             VerifyGeneratedZipsCore();
@@ -2627,9 +2789,9 @@ internal sealed class MainForm : Form
         }
 
         ParseVidPid(_primaryDeviceCombo.Text, "Primary wheelbase");
-        if (_ffbTemplateCombo.SelectedItem is not TemplateComboItem)
+        if (_applyWheelTuningCheck.Checked && _ffbTemplateCombo.SelectedItem is not TemplateComboItem)
         {
-            throw new InvalidOperationException("Choose an FFB INI template.");
+            throw new InvalidOperationException("Choose an FFB INI template, or uncheck 'Apply FFB wheel tuning'.");
         }
     }
 
@@ -2642,9 +2804,9 @@ internal sealed class MainForm : Form
             throw new InvalidOperationException("Select inputmappingprofiles.zip.");
         }
 
-        if (!File.Exists(_wheelZipText.Text))
+        if (_applyWheelTuningCheck.Checked && !File.Exists(_wheelZipText.Text))
         {
-            throw new InvalidOperationException("Select wheeltunablesettingspc.zip.");
+            throw new InvalidOperationException("Select wheeltunablesettingspc.zip, or uncheck 'Apply FFB wheel tuning'.");
         }
     }
 
@@ -2778,7 +2940,9 @@ internal sealed class MainForm : Form
             ClientSize = new Size(420, 132),
             MinimizeBox = false,
             MaximizeBox = false,
-            ShowInTaskbar = false
+            ShowInTaskbar = false,
+            BackColor = Color.FromArgb(22, 27, 34),
+            ForeColor = Color.FromArgb(201, 209, 217)
         };
 
         var layout = new TableLayoutPanel
@@ -2802,7 +2966,10 @@ internal sealed class MainForm : Form
         var nameText = new TextBox
         {
             Dock = DockStyle.Fill,
-            Text = currentName
+            Text = currentName,
+            BackColor = Color.FromArgb(30, 36, 46),
+            ForeColor = Color.FromArgb(201, 209, 217),
+            BorderStyle = BorderStyle.FixedSingle
         };
         layout.Controls.Add(nameText, 0, 1);
 
@@ -2874,8 +3041,8 @@ internal sealed class MainForm : Form
             Text = title,
             Dock = DockStyle.Fill,
             Padding = new Padding(8),
-            BackColor = Color.FromArgb(246, 248, 251),
-            ForeColor = Color.FromArgb(33, 43, 54)
+            BackColor = Color.FromArgb(22, 27, 34),
+            ForeColor = Color.FromArgb(180, 190, 205)
         };
     }
 
@@ -2886,7 +3053,7 @@ internal sealed class MainForm : Form
             Text = text,
             Dock = DockStyle.Fill,
             TextAlign = ContentAlignment.MiddleLeft,
-            ForeColor = Color.FromArgb(45, 55, 72)
+            ForeColor = Color.FromArgb(139, 148, 158)
         };
     }
 
@@ -2897,7 +3064,7 @@ internal sealed class MainForm : Form
             Text = text,
             AutoSize = true,
             Margin = new Padding(12, 8, 0, 0),
-            ForeColor = Color.FromArgb(91, 105, 125),
+            ForeColor = Color.FromArgb(88, 96, 105),
             MaximumSize = new Size(920, 0)
         };
     }
@@ -2914,6 +3081,26 @@ internal sealed class MainForm : Form
             FlatStyle = FlatStyle.System,
             Margin = new Padding(4)
         };
+        button.Click += (_, _) => onClick();
+        return button;
+    }
+
+    private static Button CreateAccentButton(string text, Action onClick, int width = 112)
+    {
+        var button = new Button
+        {
+            Text = text,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            MinimumSize = new Size(width, 32),
+            Padding = new Padding(10, 3, 10, 3),
+            FlatStyle = FlatStyle.Flat,
+            Margin = new Padding(4),
+            BackColor = Color.FromArgb(255, 102, 0),
+            ForeColor = Color.White,
+            Font = new Font("Segoe UI Semibold", 9F)
+        };
+        button.FlatAppearance.BorderSize = 0;
         button.Click += (_, _) => onClick();
         return button;
     }

@@ -1224,10 +1224,21 @@ internal static class ForzaInstallFinder
     {
         var candidates = new List<string>
         {
+            // Steam defaults
             @"C:\Program Files (x86)\Steam\steamapps\common\ForzaHorizon6\media",
-            @"C:\Program Files\Steam\steamapps\common\ForzaHorizon6\media"
+            @"C:\Program Files\Steam\steamapps\common\ForzaHorizon6\media",
         };
 
+        // Xbox Game Pass / Xbox app — scan all fixed drives
+        foreach (var drive in DriveInfo.GetDrives().Where(d => d.DriveType == DriveType.Fixed))
+        {
+            var root = drive.RootDirectory.FullName;
+            candidates.Add(Path.Combine(root, "XboxGames", "Forza Horizon 6", "Content", "media"));
+            candidates.Add(Path.Combine(root, "XboxGames", "Forza Horizon 5", "Content", "media"));
+            candidates.Add(Path.Combine(root, "XboxGames", "ForzaHorizon6", "Content", "media"));
+        }
+
+        // Steam registry paths
         foreach (var steamPath in FindSteamPaths())
         {
             candidates.Add(Path.Combine(steamPath, "steamapps", "common", "ForzaHorizon6", "media"));
@@ -1299,8 +1310,7 @@ internal static class ForzaInstallFinder
     private static bool IsForzaMediaFolder(string path)
     {
         return Directory.Exists(path)
-            && File.Exists(Path.Combine(path, "inputmappingprofiles.zip"))
-            && File.Exists(Path.Combine(path, "wheeltunablesettingspc.zip"));
+            && File.Exists(Path.Combine(path, "inputmappingprofiles.zip"));
     }
 }
 
@@ -1739,14 +1749,16 @@ internal static class GameFileInstaller
         }
     }
 
-    public static string BackupAndInstall(string mediaFolder, string outputInputZip, string outputWheelZip)
+    public static string BackupAndInstall(string mediaFolder, string outputInputZip, string? outputWheelZip)
     {
         var backupFolder = EnsureBackup(mediaFolder);
         var inputTarget = Path.Combine(mediaFolder, InputZipName);
-        var wheelTarget = Path.Combine(mediaFolder, WheelZipName);
         CopyUnlessSamePath(outputInputZip, inputTarget);
-        CopyUnlessSamePath(outputWheelZip, wheelTarget);
-
+        if (!string.IsNullOrEmpty(outputWheelZip))
+        {
+            var wheelTarget = Path.Combine(mediaFolder, WheelZipName);
+            CopyUnlessSamePath(outputWheelZip, wheelTarget);
+        }
         return backupFolder;
     }
 
